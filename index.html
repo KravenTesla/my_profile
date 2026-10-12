@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sitio académico personal de José Manuel Muñoz Contreras. Docencia, investigación, desarrollo y proyectos tecnológicos.">
+  <meta name="theme-color" content="#f5f7fb">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/avif" href="logo.avif">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <title>José Manuel Muñoz Contreras | Académico e ingeniero</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="skip">Saltar al contenido</a>
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="brand" href="#home" aria-label="Inicio">
+        <img class="brand-mark" src="logo-square.png" alt="" width="39" height="39">
+        <span class="brand-name"><b>Dr. José Manuel Muñoz Contreras</b></span>
+      </a>
+      <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="primary-nav" class="primary-nav" aria-label="Navegación principal">
+        <a href="#about" data-i18n="navAbout">Acerca de mí</a>
+        <a href="#research" data-i18n="navResearch">Investigación</a>
+        <a href="#teaching" data-i18n="navTeaching">Docencia</a>
+        <a href="#projects" data-i18n="navProjects">Proyectos</a>
+        <a href="#publications" data-i18n="navPublications">Publicaciones</a>
+        <a href="#contact" data-i18n="navContact">Contacto</a>
+        <button id="language-toggle" class="language-toggle" type="button" aria-label="Switch language">EN</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="home" class="hero section-shell">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="heroEyebrow">Perfil académico y tecnológico</span></p>
+        <h1 data-i18n="heroTitle">Investigación, docencia y tecnología con propósito.</h1>
+        <p class="hero-lead" data-i18n="heroLead">Soy José Manuel Muñoz Contreras. En este espacio reúno mi trabajo académico, recursos de enseñanza, proyectos tecnológicos e intereses de investigación.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#research"><span data-i18n="exploreResearch">Explorar investigación</span><span aria-hidden="true">↗</span></a>
+          <a class="button button-secondary" href="#contact" data-i18n="getInTouch">Contactar</a>
+        </div>
+        <div class="hero-meta">
+          <span class="meta-dot"></span><span data-i18n="heroMeta">Baja California, México</span>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="Fotografía de José Manuel Muñoz Contreras">
+        <div class="visual-core visual-core-photo">
+          <img class="hero-photo" src="jmmc.jpeg" alt="José Manuel Muñoz Contreras">
+        </div>
+        <div class="visual-note"><span class="note-dot"></span><span data-i18n="visualNote">Aprender · Construir · Compartir</span></div>
+      </div>
+    </section>
+
+    <section class="pillars section-shell" aria-label="Áreas principales">
+      <article class="pillar">
+        <div class="pillar-top"><span class="pillar-number">01</span><span class="pillar-icon">⌁</span></div>
+        <h2 data-i18n="pillar1Title">Investigación</h2>
+        <p data-i18n="pillar1Text">Exploración de problemas, métodos computacionales y conocimiento reproducible.</p>
+        <a href="#research" class="text-link"><span data-i18n="learnMore">Conocer más</span> <span>↗</span></a>
+      </article>
+      <article class="pillar">
+        <div class="pillar-top"><span class="pillar-number">02</span><span class="pillar-icon">▤</span></div>
+        <h2 data-i18n="pillar2Title">Docencia</h2>
+        <p data-i18n="pillar2Text">Materiales, prácticas y experiencias para acercar la teoría a la práctica.</p>
+        <a href="#teaching" class="text-link"><span data-i18n="learnMore">Conocer más</span> <span>↗</span></a>
+      </article>
+      <article class="pillar">
+        <div class="pillar-top"><span class="pillar-number">03</span><span class="pillar-icon">⌘</span></div>
+        <h2 data-i18n="pillar3Title">Desarrollo tecnológico</h2>
+        <p data-i18n="pillar3Text">Herramientas, software y experimentos para resolver problemas concretos.</p>
+        <a href="#projects" class="text-link"><span data-i18n="learnMore">Conocer más</span> <span>↗</span></a>
+      </article>
+    </section>
+
+    <section id="about" class="content-section section-shell">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="aboutEyebrow">Una breve introducción</span></p>
+        <h2 data-i18n="aboutTitle">Acerca de mí</h2>
+      </div>
+      <div class="about-layout">
+        <div class="about-main">
+          <p class="large-copy" data-i18n="aboutLead">Me interesa conectar el conocimiento académico con la práctica: investigar, enseñar y construir soluciones tecnológicas que puedan compartirse y mejorarse.</p>
+          <a class="text-link" href="#contact"><span data-i18n="connect">Conectar y colaborar</span> <span>↗</span></a>
+        </div>
+        <aside class="profile-panel">
+          <div class="about-orbit" aria-hidden="true">
+            <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+            <div class="visual-core profile-badge">
+              <img class="core-icon" src="logo-square.png" alt="Logotipo del sitio: árbol de circuitos">
+            </div>
+          </div>
+          <p class="profile-name">Dr. José Manuel Muñoz Contreras</p>
+          <p class="profile-role" data-i18n="profileRole">Académico · Tecnología · Investigación · Desarrollo de software</p>
+          <div class="profile-rule"></div>
+          <div class="profile-detail"><span data-i18n="locationLabel">Ubicación</span><b data-i18n="locationValue">Baja California</b></div>
+          <div class="profile-detail"><span data-i18n="institutionLabel">Institución</span><b data-i18n="institutionValue">Universidad Autónoma de Baja California (FCITEC)</b></div>
+          <div class="profile-detail"><span data-i18n="emailLabel">Correo</span><b><a href="mailto:jose.munoz14@uabc.edu.mx">jose.munoz14@uabc.edu.mx</a></b></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="research" class="content-section section-shell tinted-section">
+      <div class="section-heading split-heading">
+        <div><p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="researchEyebrow">Preguntas, métodos e ideas</span></p><h2 data-i18n="researchTitle">Investigación</h2></div>
+      </div>
+      <div class="research-grid">
+        <article class="research-card">
+          <span class="card-index">R / 01</span><div class="research-icon">∿</div>
+          <h3 data-i18n="research1Title">Programación genética y cómputo evolutivo</h3>
+          <p data-i18n="research1Text">Diseño y evaluación de algoritmos de programación genética semántica geométrica (GSGP) para regresión simbólica y modelado de datos complejos.</p>
+          <div class="tag-list"><span>Programación Genética</span><span>GSGP</span></div>
+        </article>
+        <article class="research-card">
+          <span class="card-index">R / 02</span><div class="research-icon">⌬</div>
+          <h3 data-i18n="research2Title">Regresión simbólica aplicada</h3>
+          <p data-i18n="research2Text">Métodos de regresión simbólica para problemas reales, desde estimación de composición corporal hasta modelado multidimensional.</p>
+          <div class="tag-list"><span>Regresión Simbólica</span><span>M5GP</span></div>
+        </article>
+        <article class="research-card">
+          <span class="card-index">R / 03</span><div class="research-icon">⌘</div>
+          <h3 data-i18n="research3Title">Cómputo paralelo en GPU</h3>
+          <p data-i18n="research3Text">Frameworks de software que aceleran algoritmos evolutivos mediante CUDA, como GSGP-CUDA, liberado como herramienta de código abierto.</p>
+          <div class="tag-list"><span>CUDA</span><span>Software científico</span></div>
+        </article>
+      </div>
+      <p class="section-footnote" data-i18n="researchFootnote">Cada línea está respaldada por publicaciones verificables — consulta los detalles en la sección de Publicaciones.</p>
+    </section>
+
+    <section id="teaching" class="content-section section-shell">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="teachingEyebrow">Compartir conocimiento</span></p>
+        <h2 data-i18n="teachingTitle">Docencia y recursos</h2>
+      </div>
+      <div class="teaching-layout">
+        <div class="teaching-feature">
+          <div class="feature-label"><span class="feature-dot"></span><span data-i18n="featuredResource">Recurso destacado</span></div>
+          <p class="feature-code">DOC / 001</p>
+          <h3 data-i18n="teachingFeatureTitle">Materiales para el aprendizaje práctico</h3>
+          <a class="button button-light" href="#contact"><span data-i18n="viewResources">Consultar recursos</span><span>↗</span></a>
+        </div>
+        <div class="course-list">
+          <article class="course-item"><span class="course-number">01</span><div><h3 data-i18n="course1Title">Sistemas operativos y Linux</h3><p data-i18n="course1Text">Guías, comandos esenciales y prácticas de administración.</p></div><span class="course-arrow">↗</span></article>
+          <article class="course-item"><span class="course-number">02</span><div><h3 data-i18n="course2Title">Redes y servicios</h3><p data-i18n="course2Text">Prácticas de conectividad, SSH y servicios de red.</p></div><span class="course-arrow">↗</span></article>
+          <article class="course-item"><span class="course-number">03</span><div><h3 data-i18n="course3Title">Programación</h3><p data-i18n="course3Text">Ejercicios, proyectos y material de apoyo.</p></div><span class="course-arrow">↗</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="content-section section-shell">
+      <div class="section-heading split-heading">
+        <div><p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="projectsEyebrow">De la idea al prototipo</span></p><h2 data-i18n="projectsTitle">Proyectos seleccionados</h2></div>
+      </div>
+      <div class="project-grid">
+        <article class="project-card">
+          <div class="project-visual project-visual-blue"><span class="project-glyph">⌘</span><span class="project-type">PROJECT / 01</span></div>
+          <div class="project-body"><p class="project-category" data-i18n="projectCategory1">Proyectos personales</p><h3 data-i18n="project1Title">Homelab y servicios autohospedados</h3><p data-i18n="project1Text">Diseño, despliegue y mantenimiento de servicios autohospedados para experimentar y aprender de forma continua.</p><div class="tag-list"><span>Linux</span><span>Virtualización</span><span>Redes</span></div><a href="#contact" class="text-link"><span data-i18n="projectDetails">Ver detalles</span> <span>↗</span></a></div>
+        </article>
+        <article class="project-card">
+          <div class="project-visual project-visual-sand"><span class="project-glyph">∑</span><span class="project-type">PROJECT / 02</span></div>
+          <div class="project-body"><p class="project-category" data-i18n="projectCategory2">Investigación</p><h3 data-i18n="project2Title">Visualización de métodos de aprendizaje</h3><p data-i18n="project2Text">Proyecto en desarrollo para visualizar y analizar el comportamiento de algoritmos de aprendizaje automático y cómputo evolutivo.</p><div class="tag-list"><span>En desarrollo</span><span>Aprendizaje automático</span></div><a href="#contact" class="text-link"><span data-i18n="projectDetails">Ver detalles</span> <span>↗</span></a></div>
+        </article>
+        <article class="project-card">
+          <div class="project-visual project-visual-green"><span class="project-glyph">▤</span><span class="project-type">PROJECT / 03</span></div>
+          <div class="project-body"><p class="project-category" data-i18n="projectCategory3">Herramientas educativas</p><h3 data-i18n="project3Title">Clases</h3><p data-i18n="project3Text">Página dedicada, construida en NotebookLM, que reunirá el contenido completo de mis clases, prácticas y recursos didácticos.</p><div class="tag-list"><span>NotebookLM</span><span>Docencia</span></div><a href="#contact" class="text-link"><span data-i18n="projectDetails">Ver detalles</span> <span>↗</span></a></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="publications" class="content-section section-shell tinted-section">
+      <div class="section-heading split-heading">
+        <div><p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="publicationsEyebrow">Producción académica</span></p><h2 data-i18n="publicationsTitle">Publicaciones</h2></div>
+      </div>
+      <div class="publication-list">
+        <article class="publication-item"><div class="publication-year">2026</div><div class="publication-content"><span class="publication-kind" data-i18n="pubTypePreprint">PREPRINT</span><h3>LLMs as Post-hoc Auditors of Physiological Plausibility in Symbolic Regression: A Clinician-Evaluated Case Study</h3><p>López-Varela, J.; Hidalgo, J. I.; Muñoz, J.-M.; Costilla-Reyes, O.; Maqueda, E.; Moreno-Fernandez, J.; González-Vidal, T.; Velasco, J. M.; Garnica, O. · arXiv:2609.11431</p></div><a href="https://arxiv.org/abs/2609.11431" class="publication-link" aria-label="Enlace de publicación" target="_blank" rel="noopener">↗</a></article>
+        <article class="publication-item"><div class="publication-year">2026</div><div class="publication-content"><span class="publication-kind" data-i18n="pubTypeConference">CONFERENCIA / CONGRESO</span><h3>Visualizing the Semantic Space Exploration of Ensemble Methods</h3><p>Santos, F.; Muñoz Contreras, J.; Sakallioglu, B.; Hualinga, D.; Tonda, A.; Trujillo, L. · GECCO '26 Companion, ACM · pp. 229–232</p></div><a href="https://doi.org/10.1145/3795101.3805402" class="publication-link" aria-label="Enlace de publicación" target="_blank" rel="noopener">↗</a></article>
+        <article class="publication-item"><div class="publication-year">2026</div><div class="publication-content"><span class="publication-kind" data-i18n="pubTypeChapter">CAPÍTULO DE LIBRO</span><h3>SemanticViz: Analyzing Semantic Space Exploration of Ensemble Methods</h3><p>Santos, F. J. J. B.; Muñoz Contreras, J. M.; Sakallioglu, B.; Tonda, A.; Trujillo, L. · Parallel Problem Solving from Nature – PPSN XIX, Springer Nature Switzerland · pp. 200–216</p></div><a href="https://doi.org/10.1007/978-3-032-36229-2_13" class="publication-link" aria-label="Enlace de publicación" target="_blank" rel="noopener">↗</a></article>
+        <article class="publication-item"><div class="publication-year">2026</div><div class="publication-content"><span class="publication-kind" data-i18n="pubTypeChapter">CAPÍTULO DE LIBRO</span><h3>Heeding Good Advice: Scaling Down and Specializing in the Age of Big AI</h3><p>Trujillo, L.; Maldonado, Y.; Muñoz Contreras, J. M.; Sandoval, C.; Flores-R, J.; Hernandez, D. E.; Gonzalez, L. · Genetic Programming Theory and Practice XXII, Springer Nature Singapore · pp. 405–427</p></div><a href="https://doi.org/10.1007/978-981-95-6398-2_20" class="publication-link" aria-label="Enlace de publicación" target="_blank" rel="noopener">↗</a></article>
+        <article class="publication-item"><div class="publication-year">2025</div><div class="publication-content"><span class="publication-kind" data-i18n="pubTypeArticle">ARTÍCULO DE INVESTIGACIÓN</span><h3>Benchmarking GSGP: Still Competitive 10 Years Later?</h3><p>Muñoz Contreras, J. M.; Trujillo, L.; Hernandez, D. E.; Cárdenas Florido, L. A. · Genetic Programming and Evolvable Machines, vol. 26(1), art. 6</p></div><a href="https://doi.org/10.1007/s10710-024-09504-3" class="publication-link" aria-label="Enlace de publicación" target="_blank" rel="noopener">↗</a></article>
+        <article class="publication-item"><div class="publication-year">2025</div><div class="publication-content"><span class="publication-kind" data-i18n="pubTypeConference">CONFERENCIA / CONGRESO</span><h3>Estimation of Total Body Fat Using Symbolic Regression and Evolutionary Algorithms</h3><p>Muñoz, J.-M.; Morón-García, O.; Costilla-Reyes, O.; Hidalgo, J. I. · EvoApplications 2025 (Trieste, Italia), LNCS · pp. 507–521</p></div><a href="https://doi.org/10.1007/978-3-031-90065-5_31" class="publication-link" aria-label="Enlace de publicación" target="_blank" rel="noopener">↗</a></article>
+        <article class="publication-item"><div class="publication-year">2024</div><div class="publication-content"><span class="publication-kind" data-i18n="pubTypeArticle">ARTÍCULO DE INVESTIGACIÓN</span><h3>Geometric Semantic Genetic Programming with Normalized and Standardized Random Programs</h3><p>Bakurov, I.; Muñoz Contreras, J. M.; Castelli, M.; Rodrigues, N.; Silva, S.; Trujillo, L.; Vanneschi, L. · Genetic Programming and Evolvable Machines, vol. 25(1), art. 6</p></div><a href="https://doi.org/10.1007/s10710-024-09479-1" class="publication-link" aria-label="Enlace de publicación" target="_blank" rel="noopener">↗</a></article>
+        <article class="publication-item"><div class="publication-year">2024</div><div class="publication-content"><span class="publication-kind" data-i18n="pubTypeArticle">ARTÍCULO DE INVESTIGACIÓN</span><h3>M5GP: Parallel Multidimensional Genetic Programming with Multidimensional Populations for Symbolic Regression</h3><p>Cárdenas Florido, L.; Trujillo, L.; Hernandez, D. E.; Muñoz Contreras, J. M. · Mathematical and Computational Applications, vol. 29, art. 25</p></div><a href="https://doi.org/10.3390/mca29020025" class="publication-link" aria-label="Enlace de publicación" target="_blank" rel="noopener">↗</a></article>
+        <article class="publication-item"><div class="publication-year">2022</div><div class="publication-content"><span class="publication-kind" data-i18n="pubTypeArticle">ARTÍCULO DE INVESTIGACIÓN</span><h3>GSGP-CUDA — A CUDA Framework for Geometric Semantic Genetic Programming</h3><p>Trujillo, L.; Muñoz Contreras, J. M.; Hernandez, D. E.; Castelli, M.; Tapia, J. J. · SoftwareX, vol. 18, art. 101085</p></div><a href="https://doi.org/10.1016/j.softx.2022.101085" class="publication-link" aria-label="Enlace de publicación" target="_blank" rel="noopener">↗</a></article>
+      </div>
+    </section>
+
+    <section id="contact" class="contact-section section-shell">
+      <div class="contact-copy">
+        <p class="eyebrow eyebrow-light"><span class="eyebrow-line"></span><span data-i18n="contactEyebrow">Contacto y colaboración</span></p>
+        <h2 data-i18n="contactTitle">¿Conversamos sobre una idea?</h2>
+        <p data-i18n="contactText">Estoy interesado en intercambiar ideas, compartir recursos y explorar colaboraciones académicas y tecnológicas.</p>
+      </div>
+      <div class="contact-panel">
+        <div class="contact-row"><span data-i18n="contactEmailLabel">Correo profesional</span><b><a href="mailto:jose.munoz14@uabc.edu.mx">jose.munoz14@uabc.edu.mx</a></b></div>
+        <div class="contact-row"><span>GitHub</span><b><a href="https://github.com/KravenTesla" target="_blank" rel="noopener">KravenTesla</a></b></div>
+        <div class="contact-row"><span>ORCID</span><b><a href="https://orcid.org/0009-0007-7134-8708" target="_blank" rel="noopener">0009-0007-7134-8708</a></b></div>
+        <div class="contact-row"><span>LinkedIn</span><b><a href="https://mx.linkedin.com/in/jmmc9119" target="_blank" rel="noopener">jmmc9119</a></b></div>
+        <div class="contact-row"><span>Google Scholar</span><b><a href="https://scholar.google.com/citations?user=FcmX2hYAAAAJ" target="_blank" rel="noopener">Ver perfil</a></b></div>
+        <div class="contact-row"><span>GP Bibliography</span><b><a href="https://gpbib.cs.ucl.ac.uk/gp-html/JoseManuelMunozContreras.html" target="_blank" rel="noopener">Ver perfil</a></b></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner"><a class="brand footer-brand" href="#home"><img class="brand-mark" src="logo-square.png" alt="" width="39" height="39"><span class="brand-name"><b>Dr. José Manuel Muñoz Contreras</b></span></a><p data-i18n="footerText">Docencia · Investigación · Tecnología</p><a href="#home" class="back-top"><span data-i18n="backTop">Volver arriba</span> ↑</a></div>
+    <div class="footer-bottom"><span>© <span id="current-year"></span> José Manuel Muñoz Contreras</span><span data-i18n="footerDisclaimer">Sitio personal · Contenido sujeto a actualización</span></div>
+  </footer>
+</body>
+</html>
