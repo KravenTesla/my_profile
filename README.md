@@ -1,23 +1,21 @@
-# Landing page personal — José Manuel Muñoz Contreras
+# José Manuel Muñoz Contreras — Sitio académico personal
 
-Sitio personal bilingüe (español/inglés), construido con HTML, CSS y JavaScript puro.
+Sitio web personal, orientado a presentar su perfil académico, líneas de investigación, recursos docentes, proyectos tecnológicos, publicaciones y medios de contacto.
 
-## Archivos
-- `index.html`: estructura y contenido de la página.
-- `styles.css`: diseño responsive y estilos.
-- `script.js`: selector de idioma y navegación móvil.
+🌐 **Sitio web:** https://jmmunoz.com
 
-## Vista previa local
-Abre `index.html` en un navegador moderno. Para desarrollo local también puedes usar la extensión Live Server de VS Code o ejecutar un servidor estático desde esta carpeta.
+## Contenido
 
-## Personalización antes de publicar
-1. Busca los textos entre corchetes, por ejemplo `[Añadir institución actual]`, y sustitúyelos por información verificada.
-2. Añade tu correo profesional, enlaces de GitHub, ORCID, LinkedIn y publicaciones.
-3. Revisa las líneas de investigación: son marcadores de contenido, no afirmaciones sobre tu especialidad.
-4. Actualiza los enlaces de los proyectos y recursos didácticos.
-5. Si publicas el homelab, evita revelar credenciales, IP privadas, paneles administrativos o detalles sensibles de seguridad.
+El sitio está organizado en las siguientes secciones:
 
-## Despliegue
-El sitio es estático y puede alojarse en cualquier servidor web que sirva archivos HTML, CSS y JS, por ejemplo Nginx, Apache, GitHub Pages o un contenedor web estático.
+- **Inicio:** presentación general y acceso a las áreas principales.
+- **Acerca de mí:** perfil académico, intereses de investigación, docencia y tecnologías.
+- **Investigación:** líneas relacionadas con programación genética, regresión simbólica y cómputo paralelo en GPU.
+- **Docencia y recursos:** materiales y áreas de enseñanza.
+- **Proyectos:** proyectos de investigación, herramientas educativas y experimentación tecnológica.
+- **Publicaciones:** selección de artículos, contribuciones a congresos y capítulos de libro.
+- **Contacto:** correo profesional y enlaces a perfiles académicos y profesionales.
 
-La fuente Manrope/DM Sans se carga desde Google Fonts; si prefieres no depender de un servicio externo, elimina los enlaces de fuentes en `index.html` y se usarán fuentes de sistema.
+---
+
+Desarrollado como sitio personal para reunir información académica, investigación, docencia y proyectos tecnológicos.
