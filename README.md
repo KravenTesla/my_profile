@@ -11,7 +11,7 @@ El sitio está organizado en las siguientes secciones:
 - **Inicio:** presentación general y acceso a las áreas principales.
 - **Acerca de mí:** perfil académico, intereses de investigación, docencia y tecnologías.
 - **Investigación:** líneas relacionadas con programación genética, regresión simbólica y cómputo paralelo en GPU.
-- **Docencia y recursos:** materiales y áreas de enseñanza.
+- **Docencia y recursos:** materiales y áreas de enseñanza, con acceso a la landing [`docencia.html`](docencia.html) que organiza las materias por universidad (UABC y CETYS).
 - **Proyectos:** proyectos de investigación, herramientas educativas y experimentación tecnológica.
 - **Publicaciones:** selección de artículos, contribuciones a congresos y capítulos de libro.
 - **Contacto:** correo profesional y enlaces a perfiles académicos y profesionales.
