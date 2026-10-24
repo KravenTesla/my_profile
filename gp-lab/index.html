@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Laboratorio interactivo para aprender Genetic Programming: árboles de expresión, evolución de programas y ruta de estudio.">
+  <meta name="theme-color" content="#f5f7fb">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <title>Laboratorio de Genetic Programming | José Manuel Muñoz Contreras</title>
+  <script>
+    /* Fija el tema antes del primer render para evitar parpadeo. */
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('gp-theme'); } catch (e) {}
+      if (t !== 'light' && t !== 'dark') t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/lab.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <script src="assets/js/i18n.js" defer></script>
+  <script src="assets/js/strings-lab.js" defer></script>
+  <script src="assets/js/strings-sim.js" defer></script>
+  <script src="assets/js/strings-apps.js" defer></script>
+  <script src="assets/js/gp-core.js" defer></script>
+  <script src="assets/js/progress.js" defer></script>
+  <script src="assets/js/theme.js" defer></script>
+  <script src="assets/js/tree-visualization.js" defer></script>
+  <script src="assets/js/navigation.js" defer></script>
+  <script src="assets/js/hero.js" defer></script>
+  <script src="assets/js/roadmap.js" defer></script>
+  <script src="assets/js/checks.js" defer></script>
+  <script src="assets/js/fundamentals.js" defer></script>
+  <script src="assets/js/representation.js" defer></script>
+  <script src="assets/js/charts.js" defer></script>
+  <script src="assets/js/lab-utils.js" defer></script>
+  <script src="assets/js/population.js" defer></script>
+  <script src="assets/js/fitness.js" defer></script>
+  <script src="assets/js/selection.js" defer></script>
+  <script src="assets/js/crossover.js" defer></script>
+  <script src="assets/js/mutation.js" defer></script>
+  <script src="assets/js/gp-simulator.js" defer></script>
+  <script src="assets/js/simulator-ui.js" defer></script>
+  <script src="assets/js/applications.js" defer></script>
+  <script src="assets/js/bibliography.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="skip">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="brand" href="../index.html" aria-label="José Manuel Muñoz Contreras">
+        <img class="brand-mark" src="../logo-square.png" alt="" width="39" height="39">
+        <span class="brand-name"><b>Dr. José Manuel Muñoz Contreras</b></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="primary-nav" class="primary-nav" aria-label="Navegación del laboratorio">
+        <div class="nav-top">
+          <a href="../index.html#research" class="nav-site"><span aria-hidden="true">←</span> <span data-i18n="nav.site">Sitio principal</span></a>
+          <div class="nav-tools">
+            <button id="theme-toggle" class="icon-toggle" type="button" aria-pressed="false" aria-label="Cambiar a tema oscuro">
+              <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            </button>
+            <button id="language-toggle" class="language-toggle" type="button" aria-label="Switch to English">EN</button>
+          </div>
+        </div>
+        <div class="nav-links">
+          <a href="#inicio" data-i18n="nav.home">Inicio</a>
+          <a href="#ruta" data-i18n="nav.path">Ruta</a>
+          <a href="#fundamentos" data-i18n="nav.basics">Fundamentos</a>
+          <a href="#arboles" data-i18n="nav.trees">Árboles</a>
+          <a href="#poblacion" data-i18n="nav.pop">Población</a>
+          <a href="#fitness" data-i18n="nav.fit">Fitness</a>
+          <a href="#seleccion" data-i18n="nav.sel">Selección</a>
+          <a href="#crossover" data-i18n="nav.cro">Crossover</a>
+          <a href="#mutacion" data-i18n="nav.mut">Mutación</a>
+          <a href="#simulador" data-i18n="nav.sim">Simulador</a>
+          <a href="#aplicaciones" data-i18n="nav.app">Aplicaciones</a>
+          <a href="#bibliografia" data-i18n="nav.bib">Bibliografía</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section id="inicio" class="hero section-shell" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="hero.eyebrow">Laboratorio de aprendizaje</span></p>
+        <h1 id="hero-title" data-i18n="hero.title">Genetic Programming</h1>
+        <p class="hero-sub" data-i18n="hero.sub">Cómo evolucionan los programas para resolver problemas</p>
+        <p class="hero-lead" data-i18n="hero.lead">Aprende cómo una computadora puede generar, evaluar, combinar y modificar programas para encontrar soluciones a problemas sin que tengamos que especificar previamente la estructura de la solución.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#fundamentos"><span data-i18n="hero.cta1">Comenzar aprendizaje</span><span aria-hidden="true">↗</span></a>
+          <a class="button button-secondary" href="#arboles" data-i18n="hero.cta2">Explorar cómo funciona GP</a>
+          <a class="button button-secondary" href="#ruta" data-i18n="hero.cta3">Consultar ruta de estudio</a>
+        </div>
+      </div>
+
+      <div class="scene-card">
+        <svg id="hero-scene" class="scene-svg" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="scene-caption">
+          <p class="scene-step" id="hero-step"></p>
+          <h2 class="scene-title" id="hero-stage-title"></h2>
+          <p class="scene-text" id="hero-stage-text"></p>
+        </div>
+        <div class="scene-controls">
+          <button id="hero-prev" class="ctl" type="button" aria-label="Paso anterior"><span aria-hidden="true">◀</span></button>
+          <button id="hero-play" class="ctl" type="button" aria-pressed="false" aria-label="Pausar"><span class="ctl-icon" aria-hidden="true">❚❚</span></button>
+          <button id="hero-next" class="ctl" type="button" aria-label="Paso siguiente"><span aria-hidden="true">▶</span></button>
+          <div id="hero-dots" class="hero-dots"></div>
+        </div>
+        <p class="scene-note" data-i18n="hero.note">Animación conceptual.</p>
+      </div>
+    </section>
+
+    <!-- RUTA -->
+    <section id="ruta" class="content-section section-shell tinted-section">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="path.eyebrow">Ruta de aprendizaje</span></p>
+        <h2 data-i18n="path.title">Cinco semanas para comprender GP</h2>
+        <p class="section-intro" data-i18n="path.intro"></p>
+      </div>
+      <div id="roadmap" class="roadmap">
+        <div class="path-meter-row">
+          <div class="path-meter" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0" aria-labelledby="path-meter-text"><div class="path-meter-fill"></div></div>
+          <p id="path-meter-text" class="path-meter-text"></p>
+          <button type="button" class="text-btn path-reset" data-i18n="path.reset">Reiniciar progreso</button>
+        </div>
+        <ol class="timeline" data-i18n-aria="path.timelineAria" aria-label="Semanas de la ruta de aprendizaje"></ol>
+        <article class="wk-panel" aria-labelledby="wk-title"></article>
+        <p class="section-footnote" data-i18n="path.saved">Tu progreso se guarda únicamente en este navegador.</p>
+      </div>
+    </section>
+
+    <!-- FUNDAMENTOS -->
+    <section id="fundamentos" class="content-section section-shell">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="basics.eyebrow">Fundamentos</span></p>
+        <h2 data-i18n="basics.title">¿Qué es Genetic Programming?</h2>
+        <p class="lead-question" data-i18n="basics.question"></p>
+      </div>
+
+      <div class="def-grid">
+        <div class="def-card">
+          <p class="def-text" data-i18n="basics.def"></p>
+          <p class="def-aside" data-i18n="basics.treeNote"></p>
+          <p class="def-aside thread" data-i18n="basics.thread"></p>
+        </div>
+        <div class="cycle-card">
+          <h3 data-i18n="cycle.title">El ciclo evolutivo</h3>
+          <p class="hint" data-i18n="cycle.hint"></p>
+          <svg id="cycle-svg" class="cycle-svg" viewBox="0 0 560 350" role="group" aria-label="Etapas del ciclo evolutivo" data-i18n-aria="cycle.aria"></svg>
+          <div id="cycle-info" class="cycle-info" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3 data-i18n="basics.termsTitle">Vocabulario esencial</h3>
+        <p class="hint" data-i18n="basics.termsHint"></p>
+        <div id="term-tabs" class="term-tabs" role="tablist" aria-label="Términos de GP" data-i18n-aria="basics.termsAria"></div>
+        <div id="term-panel" class="term-panel" role="tabpanel"></div>
+      </div>
+
+      <div class="block">
+        <h3 data-i18n="cmp.title">GA frente a GP</h3>
+        <div class="compare">
+          <article class="cmp-card">
+            <h4 data-i18n="cmp.ga.t"></h4>
+            <p data-i18n="cmp.ga.d"></p>
+            <div class="cmp-visual"><div id="ga-vector" class="gene-row"></div></div>
+            <p class="cmp-ex" data-i18n="cmp.ga.e"></p>
+          </article>
+          <article class="cmp-card">
+            <h4 data-i18n="cmp.gp.t"></h4>
+            <p data-i18n="cmp.gp.d"></p>
+            <div class="cmp-visual"><svg id="gp-tree" class="cmp-tree" role="img" aria-label="x × x + 2 × x + 1"></svg></div>
+            <p class="cmp-ex" data-i18n="cmp.gp.e"></p>
+          </article>
+        </div>
+        <p class="section-footnote" data-i18n="cmp.note"></p>
+      </div>
+
+      <div class="reflect"><p class="reflect-label" data-i18n="reflect.label">Pregunta de reflexión</p><p data-i18n="basics.reflect"></p></div>
+      <div class="check" data-check="basics" data-correct="0"></div>
+    </section>
+
+    <!-- ÁRBOLES -->
+    <section id="arboles" class="content-section section-shell tinted-section">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="trees.eyebrow">Representación</span></p>
+        <h2 data-i18n="trees.title">Representación mediante árboles</h2>
+        <p class="lead-question" data-i18n="trees.question"></p>
+        <p class="section-intro wide" data-i18n="trees.explain"></p>
+      </div>
+
+      <div class="lab">
+        <div class="lab-main">
+          <div class="lab-bar">
+            <div class="field">
+              <span class="field-label" id="expr-label" data-i18n="trees.exprLabel">Expresión</span>
+              <div id="tree-expr-group" class="seg-group" role="radiogroup" aria-labelledby="expr-label"></div>
+            </div>
+          </div>
+
+          <p id="tree-expr-out" class="expr-out" aria-live="polite"></p>
+
+          <div class="tree-stage">
+            <svg id="tree-svg" class="tree-svg" role="group" aria-label="Árbol de expresión interactivo" data-i18n-aria="trees.svgLabel"></svg>
+          </div>
+
+          <div class="build-bar">
+            <button id="tb-build" class="button button-primary" type="button" data-i18n="trees.build">Construir paso a paso</button>
+            <button id="tb-play" class="button button-secondary" type="button" hidden aria-pressed="false"></button>
+            <button id="tb-next" class="button button-secondary" type="button" data-i18n="trees.next">Siguiente nodo</button>
+            <button id="tb-full" class="button button-secondary" type="button" hidden data-i18n="trees.reset">Mostrar árbol completo</button>
+          </div>
+          <p id="tb-caption" class="caption" aria-live="polite"></p>
+
+          <div class="values-bar">
+            <label class="switch"><input id="tv-toggle" type="checkbox"><span data-i18n="trees.showValues">Mostrar el valor de cada nodo con x =</span></label>
+            <input id="tv-x" type="range" min="-3" max="3" step="1" value="2" aria-labelledby="tv-xval-label">
+            <output id="tv-xval" class="xval" for="tv-x">2</output><span id="tv-xval-label" class="visually-hidden">x</span>
+          </div>
+          <p id="tv-hint" class="hint" data-i18n="trees.valuesHint" hidden></p>
+          <p id="tree-note" class="hint note"></p>
+        </div>
+
+        <aside class="lab-side">
+          <section class="side-card" aria-labelledby="panel-title">
+            <h3 id="panel-title" data-i18n="trees.panelTitle">Nodo seleccionado</h3>
+            <div id="node-panel" class="node-panel" aria-live="polite"></div>
+          </section>
+          <section class="side-card" aria-labelledby="legend-title">
+            <h3 id="legend-title" data-i18n="trees.legend">Tipos de nodo</h3>
+            <p class="legend-group" data-i18n="trees.legendFn">Nodos de función (internos)</p>
+            <ul class="legend">
+              <li><span class="kind-chip kind-op"><i aria-hidden="true"></i><span data-i18n="trees.kind.op">Operador</span></span></li>
+              <li><span class="kind-chip kind-fn"><i aria-hidden="true"></i><span data-i18n="trees.kind.fn">Función</span></span></li>
+            </ul>
+            <p class="legend-group" data-i18n="trees.legendTerm">Terminales (hojas)</p>
+            <ul class="legend">
+              <li><span class="kind-chip kind-var"><i aria-hidden="true"></i><span data-i18n="trees.kind.var">Variable</span></span></li>
+              <li><span class="kind-chip kind-const"><i aria-hidden="true"></i><span data-i18n="trees.kind.const">Constante</span></span></li>
+            </ul>
+            <p class="hint" data-i18n="trees.sets"></p>
+          </section>
+          <section class="side-card" aria-labelledby="stats-title">
+            <h3 id="stats-title" data-i18n="trees.stats">Resumen del árbol</h3>
+            <dl id="tree-stats" class="stats"></dl>
+          </section>
+        </aside>
+      </div>
+
+      <p class="try" data-i18n="trees.try"></p>
+      <div class="reflect"><p class="reflect-label" data-i18n="reflect.label">Pregunta de reflexión</p><p data-i18n="trees.reflect"></p></div>
+      <div class="checks-row">
+        <div class="check" data-check="root" data-correct="0"></div>
+        <div class="check" data-check="leaves" data-correct="2"></div>
+      </div>
+    </section>
+
+    <!-- POBLACIÓN -->
+    <section id="poblacion" class="content-section section-shell">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="pop.eyebrow">Inicialización</span></p>
+        <h2 data-i18n="pop.title">Inicialización de la población</h2>
+        <p class="lead-question" data-i18n="pop.question"></p>
+        <p class="section-intro wide" data-i18n="pop.explain"></p>
+      </div>
+      <div class="panel-card">
+        <div class="controls">
+          <div class="field"><label class="field-label" for="pop-size" data-i18n="pop.size">Tamaño de población</label>
+            <div class="range-row"><input id="pop-size" type="range" min="6" max="10" step="1" value="8"><output id="pop-size-out" for="pop-size" class="xval">8</output></div></div>
+          <div class="field"><label class="field-label" for="pop-depth" data-i18n="pop.depth">Profundidad máxima</label>
+            <div class="range-row"><input id="pop-depth" type="range" min="1" max="4" step="1" value="3"><output id="pop-depth-out" for="pop-depth" class="xval">3</output></div></div>
+          <div class="field"><span class="field-label" id="pop-method-label" data-i18n="pop.method">Método de inicialización</span>
+            <div id="pop-method" class="seg-group" role="radiogroup" aria-labelledby="pop-method-label"></div></div>
+          <div class="field"><label class="field-label" for="pop-seed" data-i18n="lab.seed">Semilla</label>
+            <input id="pop-seed" class="num-input" type="number" min="1" max="999999" value="7"></div>
+          <div class="field btns">
+            <button id="pop-gen" class="button button-primary" type="button" data-i18n="pop.generate">Generar población</button>
+            <button id="pop-replay" class="button button-secondary" type="button" data-i18n="pop.replay">Repetir con esta semilla</button>
+          </div>
+        </div>
+      </div>
+      <p id="pop-out" class="caption" aria-live="polite"></p>
+      <div id="pop-grid" class="tree-grid"></div>
+      <p class="section-footnote" data-i18n="pop.note"></p>
+
+      <div class="block">
+        <h3 id="pop-compare-title"></h3>
+        <div class="compare">
+          <article class="cmp-card"><h4 data-i18n="pop.fullTitle">Full</h4><p data-i18n="pop.fullText"></p>
+            <div id="cmp-full" class="tree-grid small"></div><p id="cmp-full-stats" class="cmp-ex"></p></article>
+          <article class="cmp-card"><h4 data-i18n="pop.growTitle">Grow</h4><p data-i18n="pop.growText"></p>
+            <div id="cmp-grow" class="tree-grid small"></div><p id="cmp-grow-stats" class="cmp-ex"></p></article>
+        </div>
+      </div>
+      <div class="reflect"><p class="reflect-label" data-i18n="reflect.label">Pregunta de reflexión</p><p data-i18n="pop.reflect"></p></div>
+      <div class="check" data-check="full" data-correct="0"></div>
+    </section>
+
+    <!-- FITNESS -->
+    <section id="fitness" class="content-section section-shell tinted-section">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="fit.eyebrow">Evaluación</span></p>
+        <h2 data-i18n="fit.title">Fitness y evaluación</h2>
+        <p class="lead-question" data-i18n="fit.question"></p>
+        <p class="section-intro wide" data-i18n="fit.explain"></p>
+        <p class="formula-line"><code class="formula">RMSE = √( (1/n) · Σ (yᵢ − ŷᵢ)² )</code></p>
+      </div>
+      <div class="fit-layout">
+        <div class="fit-left">
+          <div class="side-card">
+            <div class="table-wrap"><table id="eval-table" class="eval-table compact" aria-label="Evaluación de los individuos" data-i18n-aria="fit.tableLabel"></table></div>
+          </div>
+          <section class="side-card" aria-labelledby="fit-detail-title">
+            <h3 id="fit-detail-title" class="detail-title"></h3>
+            <div class="table-wrap"><table id="detail-table" class="eval-table"></table></div>
+            <p id="fit-detail-sum" class="sum-line"></p>
+          </section>
+          <form id="fit-form" class="side-card try-form" novalidate>
+            <label class="field-label" for="fit-input" data-i18n="fit.try.label">Prueba tu propia expresión</label>
+            <div class="try-row"><input id="fit-input" class="text-input" type="text" value="x^2 + 2*x" autocomplete="off" spellcheck="false" aria-describedby="fit-hint fit-msg">
+              <button class="button button-primary" type="submit" data-i18n="fit.try.btn">Evaluar</button></div>
+            <p id="fit-hint" class="hint" data-i18n="fit.try.hint"></p>
+            <p id="fit-msg" class="form-msg" role="alert"></p>
+          </form>
+        </div>
+        <div class="fit-right">
+          <section class="side-card" aria-labelledby="fit-chart-title">
+            <h3 id="fit-chart-title" data-i18n="fit.chart.title">Valores reales y predicciones</h3>
+            <svg id="fit-chart" class="chart-svg" role="img" aria-label="Gráfica de valores reales y predicciones" data-i18n-aria="fit.chart.aria"></svg>
+            <ul id="fit-legend" class="legend chart-legend"></ul>
+          </section>
+        </div>
+      </div>
+      <div class="three-cards">
+        <article class="mini-card"><h4 data-i18n="fit.e1.t"></h4><p data-i18n="fit.e1.d"></p></article>
+        <article class="mini-card"><h4 data-i18n="fit.e2.t"></h4><p data-i18n="fit.e2.d"></p></article>
+        <article class="mini-card"><h4 data-i18n="fit.e3.t"></h4><p data-i18n="fit.e3.d"></p></article>
+      </div>
+      <div class="reflect"><p class="reflect-label" data-i18n="reflect.label">Pregunta de reflexión</p><p data-i18n="fit.reflect"></p></div>
+      <div class="check" data-check="fitness" data-correct="0"></div>
+    </section>
+
+    <!-- SELECCIÓN -->
+    <section id="seleccion" class="content-section section-shell">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="sel.eyebrow">Selección</span></p>
+        <h2 data-i18n="sel.title">Selección por torneo</h2>
+        <p class="lead-question" data-i18n="sel.question"></p>
+        <p class="section-intro wide" data-i18n="sel.explain"></p>
+        <p class="def-aside thread min-note" data-i18n="sel.minNote"></p>
+      </div>
+      <div class="sel-layout">
+        <section class="side-card" aria-labelledby="sel-pop-title">
+          <h3 id="sel-pop-title" data-i18n="sel.popTitle">Población</h3>
+          <ul id="sel-list" class="sel-list"></ul>
+        </section>
+        <div class="sel-right">
+          <div class="side-card">
+            <div class="controls stack">
+              <div class="field"><span class="field-label" id="sel-k-label" data-i18n="sel.k">Tamaño del torneo (k)</span>
+                <div id="sel-k" class="seg-group" role="radiogroup" aria-labelledby="sel-k-label"></div></div>
+              <div class="field"><label class="field-label" for="sel-seed" data-i18n="lab.seed">Semilla</label>
+                <input id="sel-seed" class="num-input" type="number" min="1" max="999999" value="42"></div>
+            </div>
+            <div class="build-bar">
+              <button id="sel-run" class="button button-primary" type="button" data-i18n="sel.run">Ejecutar torneo</button>
+              <button id="sel-reset" class="button button-secondary" type="button" data-i18n="sel.resetSeed">Reiniciar semilla</button>
+            </div>
+          </div>
+          <ol id="sel-phases" class="steps phases" aria-label="Fases del torneo"></ol>
+          <section class="side-card" aria-labelledby="sel-log-title">
+            <h3 id="sel-log-title" data-i18n="sel.logTitle">Registro del torneo</h3>
+            <ol id="sel-log" class="log" aria-live="polite"></ol>
+          </section>
+        </div>
+      </div>
+      <section class="side-card sim-card" aria-labelledby="sel-sim-title">
+        <h3 id="sel-sim-title"></h3>
+        <div id="sel-sim" class="bars"></div>
+        <button id="sel-sim-btn" class="button button-secondary" type="button" data-i18n="sel.sim">Simular 1000 torneos</button>
+      </section>
+      <div class="def-aside thread"><b data-i18n="sel.pressure.t">Presión selectiva</b>. <span data-i18n="sel.pressure.d"></span></div>
+      <div class="reflect"><p class="reflect-label" data-i18n="reflect.label">Pregunta de reflexión</p><p data-i18n="sel.reflect"></p></div>
+      <div class="check" data-check="tournament" data-correct="0"></div>
+    </section>
+
+    <!-- CROSSOVER -->
+    <section id="crossover" class="content-section section-shell tinted-section">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="cro.eyebrow">Operador</span></p>
+        <h2 data-i18n="cro.title">Crossover de subárboles</h2>
+        <p class="lead-question" data-i18n="cro.question"></p>
+        <p class="section-intro wide" data-i18n="cro.explain"></p>
+      </div>
+      <div class="panel-card">
+        <div class="controls">
+          <div class="field"><span class="field-label" id="xo-mode-label" data-i18n="cro.mode">Modo</span>
+            <div id="xo-mode" class="seg-group" role="radiogroup" aria-labelledby="xo-mode-label"></div></div>
+          <div class="field"><label class="field-label" for="xo-seed" data-i18n="lab.seed">Semilla</label>
+            <input id="xo-seed" class="num-input" type="number" min="1" max="999999" value="3"></div>
+          <div class="field"><label class="field-label" for="xo-limit" data-i18n="cro.limit">Profundidad máxima permitida</label>
+            <input id="xo-limit" class="num-input" type="number" min="1" max="10" value="3"></div>
+          <div class="field btns">
+            <button id="xo-run" class="button button-primary" type="button" data-i18n="cro.run">Realizar crossover</button>
+            <button id="xo-reset" class="button button-secondary" type="button" data-i18n="cro.reset">Reiniciar</button>
+            <button id="xo-preset" class="button button-secondary" type="button" data-i18n="cro.preset">Progenitores del ejemplo</button>
+            <button id="xo-random" class="button button-secondary" type="button" data-i18n="cro.random">Progenitores aleatorios</button>
+          </div>
+        </div>
+      </div>
+      <p id="xo-hint" class="hint"></p>
+      <p id="xo-msg" class="form-msg" role="alert"></p>
+      <div class="xo-grid">
+        <div id="xo-wrap" class="xo-wrap">
+          <div class="xo-row">
+            <section class="tpanel" aria-labelledby="xo-a-title">
+              <h3 id="xo-a-title" data-i18n="cro.parentA">Progenitor A</h3>
+              <div class="tree-stage small"><svg id="xo-a" class="tree-svg" role="group" aria-label="Progenitor A"></svg></div>
+              <p class="tinfo"><span data-i18n="cro.point">Punto de cruce</span>: <b id="xo-a-point"></b></p>
+              <p class="tinfo"><span data-i18n="cro.subA">Subárbol A</span>: <code id="xo-a-sub"></code></p>
+              <p class="tinfo"><span data-i18n="cro.expr">Expresión</span>: <code id="xo-a-expr"></code></p>
+            </section>
+            <section class="tpanel" aria-labelledby="xo-b-title">
+              <h3 id="xo-b-title" data-i18n="cro.parentB">Progenitor B</h3>
+              <div class="tree-stage small"><svg id="xo-b" class="tree-svg" role="group" aria-label="Progenitor B"></svg></div>
+              <p class="tinfo"><span data-i18n="cro.point">Punto de cruce</span>: <b id="xo-b-point"></b></p>
+              <p class="tinfo"><span data-i18n="cro.subB">Subárbol B</span>: <code id="xo-b-sub"></code></p>
+              <p class="tinfo"><span data-i18n="cro.expr">Expresión</span>: <code id="xo-b-expr"></code></p>
+            </section>
+          </div>
+          <div class="xo-row">
+            <section class="tpanel is-offspring" aria-labelledby="xo-oa-title">
+              <h3 id="xo-oa-title" data-i18n="cro.offA">Descendiente A</h3>
+              <div class="tree-stage small"><svg id="xo-oa" class="tree-svg" role="group" aria-label="Descendiente A"></svg></div>
+              <p class="tinfo"><span data-i18n="cro.expr">Expresión</span>: <code id="xo-oa-expr">—</code></p>
+            </section>
+            <section class="tpanel is-offspring" aria-labelledby="xo-ob-title">
+              <h3 id="xo-ob-title" data-i18n="cro.offB">Descendiente B</h3>
+              <div class="tree-stage small"><svg id="xo-ob" class="tree-svg" role="group" aria-label="Descendiente B"></svg></div>
+              <p class="tinfo"><span data-i18n="cro.expr">Expresión</span>: <code id="xo-ob-expr">—</code></p>
+            </section>
+          </div>
+        </div>
+        <aside class="xo-side">
+          <section class="side-card" aria-labelledby="xo-steps-title">
+            <h3 id="xo-steps-title" data-i18n="lab.steps">Pasos</h3>
+            <ol id="xo-steps" class="steps"></ol>
+          </section>
+          <section class="side-card" aria-labelledby="xo-sizes-title">
+            <h3 id="xo-sizes-title" data-i18n="cro.sizes">Tamaño y profundidad</h3>
+            <div class="table-wrap"><table id="xo-sizes" class="eval-table compact"></table></div>
+            <p class="hint" data-i18n="cro.limitNote"></p>
+          </section>
+        </aside>
+      </div>
+      <div class="def-aside thread" data-i18n="cro.warn"></div>
+      <div class="reflect"><p class="reflect-label" data-i18n="reflect.label">Pregunta de reflexión</p><p data-i18n="cro.reflect"></p></div>
+      <div class="checks-row">
+        <div class="check" data-check="cross1" data-correct="0"></div>
+        <div class="check" data-check="cross2" data-correct="0"></div>
+      </div>
+    </section>
+
+    <!-- MUTACIÓN -->
+    <section id="mutacion" class="content-section section-shell">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="mut.eyebrow">Operador</span></p>
+        <h2 data-i18n="mut.title">Mutación de subárbol</h2>
+        <p class="lead-question" data-i18n="mut.question"></p>
+        <p class="section-intro wide" data-i18n="mut.explain"></p>
+      </div>
+      <div class="panel-card">
+        <div class="controls">
+          <div class="field"><span class="field-label" id="mu-type-label" data-i18n="mut.type">Tipo de mutación</span>
+            <div id="mu-type" class="seg-group" role="radiogroup" aria-labelledby="mu-type-label"></div></div>
+          <div class="field"><span class="field-label" id="mu-mode-label" data-i18n="mut.mode">Elección del nodo</span>
+            <div id="mu-mode" class="seg-group" role="radiogroup" aria-labelledby="mu-mode-label"></div></div>
+          <div id="mu-term-field" class="field"><label class="field-label" for="mu-term" data-i18n="mut.newTerm">Nuevo terminal</label>
+            <select id="mu-term" class="num-input"></select></div>
+          <div class="field"><label class="field-label" for="mu-p" data-i18n="mut.prob">Probabilidad de mutación pₘ</label>
+            <div class="range-row"><input id="mu-p" type="range" min="0" max="1" step="0.05" value="1"><output id="mu-p-out" for="mu-p" class="xval">1.00</output></div></div>
+          <div class="field"><label class="field-label" for="mu-seed" data-i18n="lab.seed">Semilla</label>
+            <input id="mu-seed" class="num-input" type="number" min="1" max="999999" value="5"></div>
+          <div class="field btns">
+            <button id="mu-run" class="button button-primary" type="button" data-i18n="mut.run">Aplicar mutación</button>
+            <button id="mu-reset" class="button button-secondary" type="button" data-i18n="mut.reset">Reiniciar</button>
+            <button id="mu-preset" class="button button-secondary" type="button" data-i18n="mut.preset">Árbol del ejemplo</button>
+            <button id="mu-random" class="button button-secondary" type="button" data-i18n="mut.randomTree">Árbol aleatorio</button>
+          </div>
+        </div>
+      </div>
+      <p id="mu-hint" class="hint"></p>
+      <p id="mu-msg" class="form-msg" role="alert"></p>
+      <div class="xo-grid">
+        <div class="mu-main">
+          <div class="mu-row">
+            <section class="tpanel" aria-labelledby="mu-o-title">
+              <h3 id="mu-o-title" data-i18n="mut.before">Antes</h3>
+              <div class="tree-stage small"><svg id="mu-o" class="tree-svg" role="group" aria-label="Árbol original"></svg></div>
+            </section>
+            <section class="tpanel" aria-labelledby="mu-n-title">
+              <h3 id="mu-n-title" data-i18n="mut.newSub">Subárbol nuevo</h3>
+              <div id="mu-new" class="new-sub-wrap" aria-live="polite"></div>
+            </section>
+            <section class="tpanel is-offspring" aria-labelledby="mu-r-title">
+              <h3 id="mu-r-title" data-i18n="mut.after">Después</h3>
+              <div class="tree-stage small"><svg id="mu-r" class="tree-svg" role="group" aria-label="Árbol mutado"></svg></div>
+            </section>
+          </div>
+          <p id="mu-draw" class="caption" aria-live="polite"></p>
+          <div class="expr-compare">
+            <div><span class="field-label" data-i18n="mut.exprBefore">Expresión anterior</span><code id="mu-eb">—</code></div>
+            <div><span class="field-label" data-i18n="mut.exprAfter">Expresión posterior</span><code id="mu-ea">—</code></div>
+          </div>
+        </div>
+        <aside class="xo-side">
+          <section class="side-card" aria-labelledby="mu-steps-title">
+            <h3 id="mu-steps-title" data-i18n="lab.steps">Pasos</h3>
+            <ol id="mu-steps" class="steps"></ol>
+          </section>
+        </aside>
+      </div>
+      <div class="block">
+        <h3 data-i18n="mut.diff.t">Dos tipos de modificación</h3>
+        <div class="compare">
+          <article class="mini-card"><p data-i18n="mut.diff.terminal"></p></article>
+          <article class="mini-card"><p data-i18n="mut.diff.subtree"></p></article>
+        </div>
+      </div>
+      <div class="reflect"><p class="reflect-label" data-i18n="reflect.label">Pregunta de reflexión</p><p data-i18n="mut.reflect"></p></div>
+      <div class="check" data-check="mut" data-correct="0"></div>
+    </section>
+
+    <!-- SIMULADOR -->
+    <section id="simulador" class="content-section section-shell tinted-section">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="sim.eyebrow">Todo junto</span></p>
+        <h2 data-i18n="sim.title">Simulador de Genetic Programming</h2>
+        <p class="lead-question" data-i18n="sim.question"></p>
+        <p class="section-intro wide" data-i18n="sim.explain"></p>
+      </div>
+      <details class="how">
+        <summary data-i18n="sim.how.title">Cómo funciona esta implementación</summary>
+        <ol id="sim-how"></ol>
+      </details>
+
+      <div class="sim-layout">
+        <section class="side-card sim-params" aria-labelledby="sim-params-title">
+          <h3 id="sim-params-title" data-i18n="sim.paramsTitle">Parámetros</h3>
+          <div class="param-grid">
+            <div class="field"><label class="field-label" for="sp-pop" data-i18n="sim.p.pop">Tamaño de población</label><input id="sp-pop" class="num-input" type="number" min="10" max="500" step="10" value="100"></div>
+            <div class="field"><label class="field-label" for="sp-gens" data-i18n="sim.p.gens">Número de generaciones</label><input id="sp-gens" class="num-input" type="number" min="1" max="200" value="50"></div>
+            <div class="field"><label class="field-label" for="sp-init" data-i18n="sim.p.initDepth">Profundidad inicial</label><input id="sp-init" class="num-input" type="number" min="1" max="6" value="4"></div>
+            <div class="field"><label class="field-label" for="sp-max" data-i18n="sim.p.maxDepth">Profundidad máxima</label><input id="sp-max" class="num-input" type="number" min="2" max="12" value="8"></div>
+            <div class="field"><label class="field-label" for="sp-size" data-i18n="sim.p.maxSize">Tamaño máximo (nodos)</label><input id="sp-size" class="num-input" type="number" min="7" max="255" value="60"></div>
+            <div class="field"><label class="field-label" for="sp-k" data-i18n="sim.p.k">Tamaño del torneo k</label><input id="sp-k" class="num-input" type="number" min="1" max="10" value="3"></div>
+            <div class="field"><label class="field-label" for="sp-elite" data-i18n="sim.p.elite">Elitismo (individuos)</label><input id="sp-elite" class="num-input" type="number" min="0" max="20" value="1" aria-describedby="sp-elite-hint"></div>
+            <div class="field"><label class="field-label" for="sp-seed" data-i18n="sim.p.seed">Semilla</label><input id="sp-seed" class="num-input" type="number" min="1" max="999999" value="1"></div>
+          </div>
+          <div class="field pc-field">
+            <label class="field-label" for="sp-pc" data-i18n="sim.p.pc">Probabilidad de crossover Pc</label>
+            <div class="range-row"><input id="sp-pc" type="range" min="0" max="1" step="0.05" value="0.9"><output id="sp-pc-out" for="sp-pc" class="xval">0.90</output></div>
+            <p class="pm-line"><span data-i18n="sim.p.pm">Probabilidad de mutación Pm = 1 − Pc</span>: <output id="sp-pm-out" class="xval">0.10</output></p>
+          </div>
+          <p id="sp-elite-hint" class="hint" data-i18n="sim.p.eliteHint"></p>
+          <p class="hint" data-i18n="sim.p.applyHint"></p>
+          <ul id="sim-warn-list" class="warn-list" role="status"></ul>
+          <div class="sim-buttons">
+            <button id="sim-run" class="button button-primary" type="button" aria-pressed="false" data-i18n="sim.run">Ejecutar</button>
+            <button id="sim-step" class="button button-secondary" type="button" data-i18n="sim.step">Siguiente generación</button>
+            <button id="sim-all" class="button button-secondary" type="button" data-i18n="sim.all">Ejecutar hasta el final</button>
+            <button id="sim-reset" class="button button-secondary" type="button" data-i18n="sim.reset">Reiniciar</button>
+            <button id="sim-newseed" class="button button-secondary" type="button" data-i18n="sim.newSeed">Nueva semilla</button>
+          </div>
+        </section>
+
+        <div class="sim-results">
+          <p id="sim-status" class="sim-status" role="status" aria-live="polite"></p>
+          <dl class="stat-grid">
+            <div><dt data-i18n="sim.stat.gen">Generación</dt><dd id="st-gen">0</dd></div>
+            <div><dt data-i18n="sim.stat.best">Mejor RMSE</dt><dd id="st-best">—</dd></div>
+            <div><dt data-i18n="sim.stat.mean">RMSE promedio</dt><dd id="st-mean">—</dd></div>
+            <div><dt data-i18n="sim.stat.size">Tamaño promedio</dt><dd id="st-size">—</dd></div>
+            <div><dt data-i18n="sim.stat.div">Diversidad</dt><dd id="st-div">—</dd></div>
+            <div class="wide"><dt data-i18n="sim.stat.ops">Última generación</dt><dd id="st-ops" class="small">—</dd></div>
+          </dl>
+          <section class="side-card best-card" aria-labelledby="best-title">
+            <h3 id="best-title" data-i18n="sim.best.title">Mejor expresión encontrada</h3>
+            <p class="best-expr"><code id="sim-best-expr"></code></p>
+            <p id="sim-best-gen" class="hint"></p>
+            <div class="best-grid">
+              <div class="tree-stage small best-tree"><div id="sim-tree" role="img" aria-label="Árbol de la mejor expresión" data-i18n-aria="sim.treeLabel"></div></div>
+              <dl class="fields">
+                <div><dt data-i18n="sim.best.rmse">RMSE sobre los 5 datos</dt><dd id="sim-best-rmse"></dd></div>
+                <div><dt data-i18n="sim.best.unseen">RMSE en 8 puntos nuevos</dt><dd id="sim-best-unseen"></dd></div>
+                <div><dt data-i18n="sim.best.shape">Tamaño</dt><dd id="sim-best-shape"></dd></div>
+              </dl>
+            </div>
+            <p id="sim-verdict" class="verdict"></p>
+            <p class="hint" data-i18n="sim.best.unseenHint"></p>
+          </section>
+        </div>
+      </div>
+
+      <label class="switch log-switch"><input id="sim-log" type="checkbox" checked><span data-i18n="sim.c.log">Escala logarítmica en las gráficas de RMSE</span></label>
+      <div class="chart-grid">
+        <section class="side-card"><h3 data-i18n="sim.c.best">Mejor RMSE por generación</h3><svg id="ch-best" class="chart-svg" role="img" aria-labelledby="ch-best-last"></svg><p id="ch-best-last" class="chart-last"></p></section>
+        <section class="side-card"><h3 data-i18n="sim.c.mean">RMSE promedio por generación</h3><svg id="ch-mean" class="chart-svg" role="img" aria-labelledby="ch-mean-last"></svg><p id="ch-mean-last" class="chart-last"></p></section>
+        <section class="side-card"><h3 data-i18n="sim.c.size">Tamaño promedio de los árboles</h3><svg id="ch-size" class="chart-svg" role="img" aria-labelledby="ch-size-last"></svg><p id="ch-size-last" class="chart-last"></p></section>
+        <section class="side-card"><h3 data-i18n="sim.c.div">Diversidad de la población</h3><svg id="ch-div" class="chart-svg" role="img" aria-labelledby="ch-div-last"></svg><p id="ch-div-last" class="chart-last"></p><p class="hint" data-i18n="sim.c.divHint"></p></section>
+      </div>
+
+      <section class="side-card history-card" aria-labelledby="hist-title">
+        <h3 id="hist-title" data-i18n="sim.h.title">Historial de evolución</h3>
+        <div class="table-wrap history-wrap"><table id="sim-history" class="eval-table compact"></table></div>
+      </section>
+
+      <section class="side-card batch-card" aria-labelledby="batch-title">
+        <h3 id="batch-title" data-i18n="sim.b.title">Prueba con 10 semillas</h3>
+        <button id="sim-batch" class="button button-secondary" type="button" data-i18n="sim.batch">Probar 10 semillas</button>
+        <div id="batch-out" class="batch-out"></div>
+      </section>
+
+      <div class="def-aside thread" data-i18n="sim.warn"></div>
+      <div class="reflect"><p class="reflect-label" data-i18n="reflect.label">Pregunta de reflexión</p><p data-i18n="sim.reflect"></p></div>
+      <div class="checks-row">
+        <div class="check" data-check="sim1" data-correct="0"></div>
+        <div class="check" data-check="sim2" data-correct="0"></div>
+      </div>
+    </section>
+
+    <!-- APLICACIONES -->
+    <section id="aplicaciones" class="content-section section-shell">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="app.eyebrow">Aplicaciones</span></p>
+        <h2 data-i18n="app.title">Cinco aplicaciones reales de GP</h2>
+        <p class="lead-question" data-i18n="app.question"></p>
+        <p class="section-intro wide" data-i18n="app.intro"></p>
+        <ul class="kind-legend" aria-label="Nivel de evidencia" data-i18n-aria="app.kindLegend">
+          <li><span class="badge is-prototype" data-i18n="app.kind.prototype"></span></li>
+          <li><span class="badge is-research" data-i18n="app.kind.research"></span></li>
+        </ul>
+      </div>
+      <div id="app-list" class="app-list"></div>
+      <div class="reflect"><p class="reflect-label" data-i18n="reflect.label">Pregunta de reflexión</p><p data-i18n="app.reflect"></p></div>
+      <div class="checks-row">
+        <div class="check" data-check="appchk1" data-correct="0"></div>
+        <div class="check" data-check="appchk2" data-correct="0"></div>
+      </div>
+    </section>
+
+    <!-- BIBLIOGRAFÍA -->
+    <section id="bibliografia" class="content-section section-shell tinted-section">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="bib.eyebrow">Recursos</span></p>
+        <h2 data-i18n="bib.title">Bibliografía y recursos</h2>
+        <p class="lead-question" data-i18n="bib.question"></p>
+        <p class="section-intro wide" data-i18n="bib.intro"></p>
+      </div>
+      <div id="bib-list" class="bib-list"></div>
+      <div class="check" data-check="bibchk" data-correct="0"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <a class="brand footer-brand" href="../index.html"><img class="brand-mark" src="../logo-square.png" alt="" width="39" height="39"><span class="brand-name"><b>Dr. José Manuel Muñoz Contreras</b></span></a>
+      <p data-i18n="footer.text">Laboratorio de aprendizaje · Genetic Programming</p>
+      <a href="#inicio" class="back-top"><span data-i18n="footer.back">Volver arriba</span> ↑</a>
+    </div>
+    <div class="footer-bottom"><span>© <span id="current-year"></span> José Manuel Muñoz Contreras</span><span data-i18n="footer.note">Material didáctico · Contenido sujeto a actualización</span></div>
+  </footer>
+</body>
+</html>
