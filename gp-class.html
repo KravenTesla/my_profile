@@ -1,0 +1,1681 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Clase introductoria de Programación Genética: elementos, representación con árboles de expresión, historia, relevancia en 2026 y un ejemplo completo sobre y = x² + x.">
+  <meta name="theme-color" content="#f7f8fb">
+  <title>Programación Genética · Clase introductoria | José Manuel Muñoz Contreras</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/avif" href="logo.avif">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+    :root {
+      --ink: #17243a;
+      --ink-soft: #536176;
+      --muted: #5f6b7e;
+      --paper: #f7f8fb;
+      --white: #ffffff;
+      --line: #e2e7ef;
+      --tint: #eef2f7;
+      --navy: #183b67;
+      --blue: #2f659b;
+      --blue-soft: #eaf1f8;
+      --sand: #f0e8d9;
+      --green: #2f7a5b;
+      --green-ink: #1f4d3a;
+      --green-soft: #dcebe4;
+      --orange: #b4531a;
+      --orange-soft: #f7e7db;
+      --dark: #142d4a;
+      --darker: #10243b;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: "DM Sans", system-ui, sans-serif;
+      --display: "Manrope", "DM Sans", sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+      --shadow: 0 20px 55px rgba(25, 47, 77, .08);
+      --header-h: 76px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 16px); -webkit-text-size-adjust: 100%; }
+    body { margin: 0; overflow-x: hidden; color: var(--ink); background: var(--paper); font: 400 1.0625rem/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    svg { max-width: 100%; }
+    p { margin: 0 0 1rem; }
+    code, .mono { font-family: var(--mono); font-size: .9em; font-weight: 600; }
+    code { padding: .08em .35em; border-radius: 5px; background: var(--blue-soft); color: var(--navy); white-space: nowrap; }
+    ::selection { background: #d8e6f4; color: var(--ink); }
+    :focus-visible { outline: 3px solid #77a9d8; outline-offset: 3px; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; background: #fff; padding: .75rem 1rem; border-radius: .5rem; }
+    .skip-link:focus { top: 1rem; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+    /* ---------- Progreso, cabecera y navegación ---------- */
+    .progress { position: fixed; top: 0; left: 0; right: 0; z-index: 80; height: 3px; background: var(--blue); transform: scaleX(0); transform-origin: 0 50%; }
+    .site-header { position: sticky; top: 0; z-index: 50; background: rgba(247,248,251,.92); border-bottom: 1px solid rgba(226,231,239,.8); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+    .shell { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+    .nav-wrap { min-height: var(--header-h); display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+    .brand { display: inline-flex; align-items: center; gap: .75rem; flex-shrink: 0; }
+    .brand-mark { width: 39px; height: 39px; padding: 5px; object-fit: contain; background: var(--white); border-radius: 11px; box-shadow: inset 0 0 0 1px var(--line); }
+    .brand-name { display: grid; font-size: .76rem; line-height: 1.35; letter-spacing: -.01em; color: var(--ink-soft); }
+    .brand-name b { font-size: .86rem; color: var(--ink); font-weight: 700; }
+    .primary-nav { display: flex; align-items: center; gap: clamp(.7rem, 1.25vw, 1.25rem); }
+    .primary-nav a { position: relative; padding: .4rem 0; color: #4e5d72; font-size: .8rem; font-weight: 600; white-space: nowrap; transition: color .2s; }
+    .primary-nav a .n { margin-right: .3rem; color: #8090a5; font: 700 .7rem var(--display); }
+    .primary-nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; border-radius: 2px; background: var(--blue); transform: scaleX(0); transition: transform .25s; }
+    .primary-nav a:hover, .primary-nav a:focus-visible, .primary-nav a.active { color: var(--blue); }
+    .primary-nav a.active .n { color: var(--blue); }
+    .primary-nav a.active::after { transform: scaleX(1); }
+    .menu-toggle { display: none; }
+
+    /* ---------- Componentes base del sitio ---------- */
+    .section { padding-block: clamp(5rem, 8vw, 7rem); }
+    .tinted { background: var(--tint); }
+    .section-heading { max-width: 780px; margin-bottom: clamp(2rem, 4vw, 3rem); }
+    .eyebrow { display: flex; align-items: center; gap: .65rem; margin: 0 0 1.1rem; color: var(--blue); text-transform: uppercase; font-size: .72rem; font-weight: 800; letter-spacing: .16em; }
+    .eyebrow-line { display: inline-block; width: 27px; height: 2px; background: currentColor; }
+    .sec-title { margin: 0; font: 700 clamp(2rem, 4vw, 3.1rem)/1.15 var(--display); letter-spacing: -.055em; }
+    .sec-num { color: var(--blue); }
+    .section-intro { max-width: 680px; margin: 1rem 0 0; color: var(--ink-soft); line-height: 1.75; }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 1rem; min-height: 50px; padding: .8rem 1.25rem; border: 0; border-radius: 8px; font-size: .92rem; font-weight: 700; cursor: pointer; transition: transform .2s, box-shadow .2s, background .2s; }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary { background: var(--navy); color: #fff; box-shadow: 0 8px 20px rgba(24,59,103,.16); }
+    .button-primary:hover { background: #214e7e; box-shadow: 0 12px 26px rgba(24,59,103,.2); }
+    .button-secondary { border: 1px solid #d8e0e9; background: rgba(255,255,255,.6); color: var(--ink); }
+    .button-light { background: #fff; color: var(--navy); }
+    .meta-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #6b9a86; flex-shrink: 0; }
+    .grid-2, .grid-3, .grid-4 { display: grid; gap: 1rem; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card { position: relative; min-width: 0; padding: 1.5rem; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+    .card-index { position: absolute; top: 1.35rem; right: 1.4rem; color: #7c899a; font-size: .7rem; font-weight: 800; letter-spacing: .1em; }
+    .card h3 { margin: 1.15rem 0 .5rem; font: 700 1.16rem/1.35 var(--display); letter-spacing: -.03em; }
+    .card p { margin: 0; color: var(--ink-soft); line-height: 1.7; }
+    .icon-box { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 11px; background: var(--blue-soft); color: var(--navy); }
+    .icon-box svg { width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-box.green { background: var(--green-soft); color: var(--green-ink); }
+    .icon-box.orange { background: var(--orange-soft); color: var(--orange); }
+    .icon-box.sand { background: var(--sand); color: #6d5426; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.1rem; }
+    .tag-list span { padding: .27rem .55rem; border-radius: 5px; background: #f1f4f8; color: #4f5f74; font-size: .74rem; font-weight: 700; }
+
+    /* Mensajes clave */
+    .keyquote { margin: clamp(2rem, 4vw, 3rem) 0 0; padding: 1.6rem 1.8rem; border-left: 4px solid var(--blue); border-radius: 0 12px 12px 0; background: #fff; color: var(--navy); font: 600 clamp(1.25rem, 2.3vw, 1.65rem)/1.45 var(--display); letter-spacing: -.03em; box-shadow: 0 10px 35px rgba(25,47,77,.04); }
+    .keyquote p { margin: 0; }
+    .callout { display: flex; align-items: flex-start; gap: .75rem; margin: 1.4rem 0 0; padding: .95rem 1.15rem; border-radius: 10px; background: var(--blue-soft); color: var(--navy); font-weight: 600; line-height: 1.55; }
+    .callout::before { content: ""; flex-shrink: 0; width: 8px; height: 8px; margin-top: .55em; border-radius: 50%; background: currentColor; }
+    .callout.green { background: var(--green-soft); color: var(--green-ink); }
+    .callout.orange { background: var(--orange-soft); color: #8a3d10; }
+
+    /* ---------- Diagramas SVG ---------- */
+    .figure { margin: 0; padding: clamp(1rem, 2vw, 1.5rem); background: #fff; border: 1px solid var(--line); border-radius: 14px; min-width: 0; }
+    .figure figcaption { margin-top: .8rem; color: var(--muted); font-size: .92rem; line-height: 1.55; }
+    .diagram { display: block; width: 100%; height: auto; overflow: visible; }
+    .diagram .edge { stroke: #9aabbf; stroke-width: 2; fill: none; }
+    .diagram .edge.ghost { stroke: #c3cddb; stroke-dasharray: 4 5; }
+    .diagram .nd text { font: 600 17px var(--mono); text-anchor: middle; dominant-baseline: central; }
+    .diagram .fn circle { fill: var(--navy); }
+    .diagram .fn text { fill: #fff; }
+    .diagram .leaf circle { fill: var(--green-soft); stroke: var(--green); stroke-width: 2; }
+    .diagram .leaf text { fill: var(--green-ink); }
+    .diagram .mut circle { fill: var(--orange); stroke: none; }
+    .diagram .mut text { fill: #fff; }
+    .diagram .new circle { stroke: var(--orange); stroke-width: 3.5; }
+    .diagram .slot { fill: none; stroke: #b5c1d0; stroke-width: 1.5; stroke-dasharray: 4 4; }
+    .diagram .cut { fill: rgba(180,83,26,.06); stroke: var(--orange); stroke-width: 2; stroke-dasharray: 6 5; }
+    .diagram .guide { stroke: #e3e8ef; stroke-width: 1; stroke-dasharray: 3 5; }
+    .diagram .lbl { font: 600 14px var(--sans); fill: var(--ink-soft); text-anchor: middle; }
+    .diagram .lbl-mono { font: 600 15px var(--mono); fill: var(--ink); text-anchor: middle; }
+    .diagram .note { font: 500 13px var(--sans); fill: var(--muted); }
+    .diagram .note.mid { text-anchor: middle; }
+    .diagram .note.ok { fill: var(--green); font-weight: 700; }
+    .diagram .note.warn { fill: var(--orange); font-weight: 700; }
+    .diagram .val rect { fill: var(--blue-soft); stroke: #bcd0e5; }
+    .diagram .val text { font: 700 12px var(--mono); fill: var(--navy); text-anchor: middle; dominant-baseline: central; }
+    .diagram .arrow { stroke: var(--ink-soft); stroke-width: 2; fill: none; }
+    .diagram .arrow.soft { stroke: #8796ab; stroke-dasharray: 5 5; }
+    .diagram .arrowhead { fill: var(--ink-soft); }
+    .diagram.sm .nd text { font-size: 14px; }
+    .diagram .box rect { fill: #fff; stroke: #c4d0de; stroke-width: 1.5; }
+    .diagram .box text { font: 600 14px var(--sans); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+    .diagram .box.start rect { fill: var(--blue-soft); stroke: var(--blue); }
+    .diagram .box.eval rect { fill: #fff; stroke: var(--navy); stroke-width: 2; }
+    .diagram .box.best rect { fill: var(--green-soft); stroke: var(--green); stroke-width: 2; }
+    .diagram .box.best text { fill: var(--green-ink); }
+    .diagram .box.mutb rect { fill: var(--orange-soft); stroke: var(--orange); }
+    .diagram .decision polygon { fill: var(--sand); stroke: #a8874f; stroke-width: 1.5; }
+    .diagram .decision text { font: 700 14px var(--sans); fill: #5a4320; text-anchor: middle; dominant-baseline: central; }
+    .panels { display: grid; gap: .75rem 1rem; }
+    .panels-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .panels-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .5rem; }
+    .panels-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem 1rem; }
+    .panel-divider { grid-column: 1 / -1; display: flex; align-items: center; gap: .8rem; margin: .6rem 0; color: var(--orange); font-size: .85rem; font-weight: 700; }
+    .panel-divider::before, .panel-divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+    .panel { display: flex; flex-direction: column; align-items: center; min-width: 0; }
+    .panel .diagram { max-width: 220px; }
+    .panel-cap { margin-top: .35rem; color: var(--ink-soft); font-size: .9rem; line-height: 1.45; text-align: center; }
+    .panels-5 .panel-cap { font: 600 .82rem var(--mono); color: var(--ink); }
+    .panel-cap b { color: var(--navy); }
+    .panel-cap code { font-size: .85em; }
+    .panel-cap .ok { color: var(--green); font-weight: 700; }
+    .panel-cap .warn { color: var(--orange); font-weight: 700; }
+    .legend { display: flex; flex-wrap: wrap; gap: .5rem 1.1rem; margin-top: .9rem; color: var(--ink-soft); font-size: .88rem; }
+    .legend span { display: inline-flex; align-items: center; gap: .45rem; }
+    .legend i { display: inline-block; width: 14px; height: 14px; border-radius: 50%; }
+    .legend .l-fn { background: var(--navy); }
+    .legend .l-leaf { background: var(--green-soft); box-shadow: inset 0 0 0 2px var(--green); }
+    .legend .l-mut { background: var(--orange); }
+    .legend .l-cut { border-radius: 4px; box-shadow: inset 0 0 0 2px var(--orange); background: rgba(180,83,26,.06); }
+    .legend .l-val { border-radius: 4px; background: var(--blue-soft); box-shadow: inset 0 0 0 1px #bcd0e5; }
+
+    /* ---------- Hero ---------- */
+    .hero { display: grid; grid-template-columns: 1.02fr .98fr; align-items: center; gap: clamp(2.5rem, 6vw, 5.5rem); min-height: min(820px, calc(100vh - var(--header-h))); padding-block: clamp(4rem, 7vw, 6.5rem); }
+    .hero h1 { margin: 0; font: 700 clamp(2.9rem, 5.6vw, 5rem)/1.04 var(--display); letter-spacing: -.06em; }
+    .hero-sub { margin: 1.1rem 0 0; max-width: 560px; color: var(--navy); font: 600 clamp(1.3rem, 2.2vw, 1.7rem)/1.35 var(--display); letter-spacing: -.035em; }
+    .hero-lead { max-width: 540px; margin: 1.2rem 0 0; color: var(--ink-soft); line-height: 1.75; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+    .hero-visual { position: relative; display: grid; place-items: center; min-height: clamp(340px, 38vw, 500px); isolation: isolate; }
+    .hero-visual::before { content: ""; position: absolute; inset: 4% 0; z-index: -2; background-image: radial-gradient(#cfd9e6 1.2px, transparent 1.2px); background-size: 22px 22px; -webkit-mask-image: radial-gradient(closest-side, #000 40%, transparent); mask-image: radial-gradient(closest-side, #000 40%, transparent); }
+    .orbit { position: absolute; z-index: -1; border: 1px solid #c7d6e6; border-radius: 50%; }
+    .orbit-one { width: 92%; height: 62%; transform: rotate(-14deg); }
+    .orbit-two { width: 76%; height: 88%; transform: rotate(32deg); border-color: #d8e1ec; }
+    .hero-card { width: 100%; max-width: 500px; padding: 1.1rem 1.1rem .6rem; background: rgba(255,255,255,.92); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); }
+    .hero-card-top { display: flex; justify-content: space-between; gap: 1rem; padding: 0 .3rem .4rem; color: var(--muted); font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+
+    /* ---------- 01 Caja negra ---------- */
+    .compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .compare-card { display: flex; flex-direction: column; gap: 1rem; padding: clamp(1.5rem, 3vw, 2.3rem); border-radius: 14px; min-height: 300px; }
+    .compare-card h3 { margin: 0; font: 700 clamp(1.35rem, 2.3vw, 1.75rem)/1.2 var(--display); letter-spacing: -.04em; }
+    .compare-card p { margin: 0; line-height: 1.7; }
+    .compare-label { font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .compare-dl { color: #fff; background: linear-gradient(145deg, #26344b, #121a28); }
+    .compare-dl .compare-label { color: #aebad0; }
+    .compare-dl p { color: #d3dae6; }
+    .compare-gp { background: #fff; border: 1px solid var(--line); }
+    .compare-gp .compare-label { color: var(--green); }
+    .compare-gp p { color: var(--ink-soft); }
+    .compare-icon { width: 72px; height: 72px; }
+    .compare-formula { margin-top: auto; padding: .8rem 1rem; border-radius: 9px; background: var(--green-soft); color: var(--green-ink); font: 700 1.05rem var(--mono); overflow-wrap: anywhere; }
+    .compare-weights { margin-top: auto; padding: .8rem 1rem; border-radius: 9px; background: rgba(255,255,255,.06); color: #aebad0; font: 600 .85rem/1.5 var(--mono); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+    /* ---------- 02 Idea central ---------- */
+    .definition { max-width: 940px; margin: 0 0 clamp(2rem, 4vw, 3rem); color: #273c57; font: 500 clamp(1.4rem, 2.6vw, 2.05rem)/1.45 var(--display); letter-spacing: -.035em; }
+    .definition strong { color: var(--navy); font-weight: 800; }
+    .idea-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3rem); align-items: start; }
+    .concepts { display: grid; gap: 1rem; }
+    .concept { display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: start; }
+    .concept h3 { margin: .1rem 0 .3rem; }
+    .concept-num { color: var(--blue); font: 800 .8rem var(--display); letter-spacing: .1em; }
+
+    /* ---------- 03 Anatomía ---------- */
+    .anat-nav { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1rem; padding: 0; list-style: none; }
+    .anat-nav a { display: inline-flex; align-items: center; gap: .4rem; padding: .45rem .8rem; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink-soft); font-size: .86rem; font-weight: 600; transition: border-color .2s, color .2s; }
+    .anat-nav a:hover, .anat-nav a:focus-visible { border-color: var(--blue); color: var(--blue); }
+    .anat-nav b { color: var(--blue); font: 800 .76rem var(--display); }
+    .problem-strip { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.4rem; margin: 0 0 1rem; padding: 1rem 1.2rem; border: 1px solid #cfe0d7; border-radius: 12px; background: #f2f8f5; color: var(--green-ink); font-size: .95rem; }
+    .problem-strip strong { font-family: var(--display); }
+    .problem-strip .data { font: 600 .92rem var(--mono); }
+    .anat { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; padding-block: clamp(2.5rem, 5vw, 4rem); border-top: 1px solid #d9e1eb; }
+    .anat-full { grid-column: 1 / -1; min-width: 0; }
+    .anat-num { margin: 0; color: var(--blue); font: 800 .78rem var(--display); letter-spacing: .14em; text-transform: uppercase; }
+    .anat h3 { margin: .45rem 0 .8rem; font: 700 clamp(1.5rem, 2.6vw, 2rem)/1.2 var(--display); letter-spacing: -.045em; }
+    .anat .def { color: #273c57; font-size: 1.125rem; line-height: 1.65; }
+    .points { margin: 0; padding-left: 1.15rem; color: var(--ink-soft); }
+    .points li { margin: .4rem 0; padding-left: .2rem; }
+    .points li::marker { color: var(--blue); }
+    .points strong { color: var(--ink); }
+    .example-box { margin-top: 1.3rem; padding: 1.05rem 1.2rem; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+    .example-box h4, .mini-title { margin: 0 0 .5rem; color: var(--green); font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .example-box p { margin: 0; color: var(--ink-soft); }
+    .example-box p + p { margin-top: .5rem; }
+    .calc { display: block; margin-top: .55rem; padding: .6rem .8rem; border-radius: 8px; background: #f5f7fa; color: var(--ink); font: 600 .92rem/1.6 var(--mono); overflow-x: auto; }
+    .stack { display: grid; gap: 1rem; min-width: 0; }
+    .mini-card { padding: 1.15rem 1.25rem; background: #fff; border: 1px solid var(--line); border-radius: 12px; min-width: 0; }
+    .mini-card h4 { margin: 0 0 .35rem; font: 700 1.05rem var(--display); letter-spacing: -.02em; }
+    .mini-card p { margin: 0; color: var(--ink-soft); font-size: 1rem; line-height: 1.65; }
+    .mini-card .icon-box { width: 40px; height: 40px; margin-bottom: .8rem; }
+    .mini-card .icon-box svg { width: 22px; height: 22px; }
+    .mini-card .ex { display: block; margin-top: .6rem; color: var(--navy); font: 600 .9rem var(--mono); }
+
+    /* Tablas */
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: .97rem; }
+    .data-table caption { padding: .9rem 1rem .2rem; color: var(--muted); font-size: .88rem; text-align: left; }
+    .data-table th, .data-table td { padding: .72rem .95rem; border-bottom: 1px solid #edf0f5; text-align: left; white-space: nowrap; }
+    .data-table thead th { background: #f8fafc; color: var(--muted); font-size: .74rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .data-table tbody tr:last-child td, .data-table tbody tr:last-child th { border-bottom: 0; }
+    .data-table td.num, .data-table th.num { text-align: right; font-family: var(--mono); font-weight: 600; }
+    .data-table td.f { font-family: var(--mono); font-weight: 600; color: var(--navy); }
+    .data-table td.wrap { white-space: normal; min-width: 220px; color: var(--ink-soft); }
+    .data-table tr.best td { background: #eef6f1; }
+    .data-table tr.best td:first-child { box-shadow: inset 4px 0 0 var(--green); }
+    .badge { display: inline-block; margin-left: .4rem; padding: .12rem .45rem; border-radius: 5px; background: var(--green); color: #fff; font: 700 .68rem var(--sans); letter-spacing: .06em; text-transform: uppercase; vertical-align: middle; }
+    .badge.orange { background: var(--orange); }
+    .fbar { display: inline-block; height: 8px; margin-right: .55rem; border-radius: 4px; background: var(--green); vertical-align: middle; }
+
+    /* Selección */
+    .tourney { display: flex; flex-wrap: wrap; align-items: stretch; gap: .6rem; margin-top: .8rem; }
+    .cand { flex: 1 1 110px; padding: .65rem .8rem; border: 1px solid var(--line); border-radius: 10px; background: #f8fafc; }
+    .cand .f { display: block; color: var(--navy); font: 700 1rem var(--mono); }
+    .cand small { display: block; margin-top: .15rem; color: var(--muted); font-size: .82rem; }
+    .cand.win { border: 2px solid var(--green); background: var(--green-soft); }
+    .cand.win .f { color: var(--green-ink); }
+    .roulette { display: flex; height: 36px; margin-top: .8rem; overflow: hidden; border-radius: 8px; }
+    .roulette span { display: grid; place-items: center; color: #fff; font: 700 .78rem var(--mono); white-space: nowrap; overflow: hidden; }
+    .roulette-legend { display: flex; flex-wrap: wrap; gap: .3rem .9rem; margin-top: .6rem; color: var(--ink-soft); font-size: .84rem; }
+    .roulette-legend span { display: inline-flex; align-items: center; gap: .35rem; font-family: var(--mono); }
+    .roulette-legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+    .c1 { background: var(--green); } .c2 { background: var(--navy); } .c3 { background: var(--blue); } .c4 { background: #5d7fa6; } .c5 { background: #7d93ad; }
+
+    /* Detalles desplegables */
+    .reveal-example { margin-top: 1rem; }
+    .reveal-example summary { display: inline-flex; align-items: center; gap: .6rem; min-height: 44px; padding: .6rem 1rem; border: 1px solid #c9d6e5; border-radius: 8px; background: #fff; color: var(--navy); font-size: .92rem; font-weight: 700; cursor: pointer; list-style: none; transition: border-color .2s, background .2s; }
+    .reveal-example summary::-webkit-details-marker { display: none; }
+    .reveal-example summary::before { content: "+"; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--blue-soft); font: 800 .95rem/1 var(--mono); }
+    .reveal-example[open] summary::before { content: "−"; }
+    .reveal-example summary:hover { border-color: var(--blue); background: var(--blue-soft); }
+    .reveal-example .when-open { display: none; }
+    .reveal-example[open] .when-open { display: inline; }
+    .reveal-example[open] .when-closed { display: none; }
+    .reveal-example .figure { margin-top: 1rem; }
+
+    /* Bloat */
+    .size-bars { display: grid; gap: .7rem; margin-top: .8rem; }
+    .size-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: .3rem; }
+    .size-row .f { font: 600 .88rem var(--mono); color: var(--ink); overflow-wrap: anywhere; }
+    .size-track { display: flex; align-items: center; gap: .6rem; color: var(--muted); font-size: .85rem; }
+    .size-track i { display: block; height: 12px; border-radius: 6px; background: var(--green); }
+    .size-track i.bloat { background: var(--orange); }
+
+    /* Flujo */
+    .flow-wrap { margin-top: clamp(2.5rem, 5vw, 3.5rem); }
+    .flow-v { display: none; max-width: 360px; margin-inline: auto; }
+
+    /* ---------- 04 Historia ---------- */
+    .timeline { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; margin: 0; padding: 0; list-style: none; }
+    .timeline::before { content: ""; position: absolute; top: 9px; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--blue), #6b9a86); }
+    .tl-item { position: relative; padding-top: 2.4rem; }
+    .tl-item::before { content: ""; position: absolute; top: 1px; left: 0; width: 18px; height: 18px; border: 3px solid var(--blue); border-radius: 50%; background: var(--paper); }
+    .tl-item:last-child::before { border-color: #3e7f63; background: var(--green-soft); }
+    .tl-year { color: var(--navy); font: 800 clamp(1.3rem, 2vw, 1.6rem)/1.2 var(--display); letter-spacing: -.04em; }
+    .tl-item h3 { margin: .45rem 0 .4rem; font: 700 1.08rem/1.35 var(--display); letter-spacing: -.02em; }
+    .tl-item p { margin: 0; color: var(--ink-soft); font-size: 1rem; line-height: 1.65; }
+
+    /* ---------- 05/06 tarjetas grandes ---------- */
+    .big-card { padding: clamp(1.5rem, 3vw, 2rem); }
+    .big-card h3 { font-size: 1.3rem; }
+    .domain { margin: 1.1rem 0 0; color: var(--blue); font-size: .72rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .domain + h3 { margin-top: .4rem; }
+    .impact { margin-top: 1.1rem !important; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--navy) !important; font-weight: 600; }
+    .footnote { margin: 1.2rem 0 0; color: var(--muted); font-size: .88rem; line-height: 1.6; }
+
+    /* ---------- 07 Investigación ---------- */
+    .research-card { display: flex; flex-direction: column; }
+    .research-card .tag-list { margin-top: 1rem; }
+    .research-ref { margin-top: auto !important; padding-top: 1rem; font-size: .88rem; line-height: 1.55 !important; color: var(--muted) !important; }
+    .research-card .tag-list + .research-ref { margin-top: 1rem !important; border-top: 1px solid var(--line); }
+    .research-ref b { color: var(--ink-soft); }
+
+    /* ---------- 08 Problemas abiertos ---------- */
+    .open-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 2.5rem; margin: 0; padding: 0; list-style: none; counter-reset: op; }
+    .open-item { position: relative; padding: 1.5rem 0 1.5rem 3.4rem; border-top: 1px solid #d9e1eb; counter-increment: op; }
+    .open-item::before { content: counter(op, decimal-leading-zero); position: absolute; left: 0; top: 1.5rem; display: grid; place-items: center; width: 2.3rem; height: 2.3rem; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font: 800 .85rem var(--display); }
+    .open-item h3 { margin: .2rem 0 .45rem; font: 700 1.16rem/1.35 var(--display); letter-spacing: -.03em; }
+    .open-item p { margin: 0; color: var(--ink-soft); line-height: 1.7; }
+    .open-item .open-q { margin-top: .7rem; padding-left: .8rem; border-left: 3px solid var(--blue); color: var(--navy); font-weight: 600; font-style: italic; }
+
+    /* ---------- 09 Demo ---------- */
+    .demo-layout { display: grid; gap: 1.25rem; }
+    .demo-problem { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.5rem; align-items: center; }
+    .data-pairs { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .data-pairs span { padding: .5rem .8rem; border: 1px solid #cfe0d7; border-radius: 8px; background: #f2f8f5; color: var(--green-ink); font: 700 .95rem var(--mono); }
+
+    /* ---------- 09 Referencias ---------- */
+    .ref-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid #d9e1eb; }
+    .ref-item { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 1.5rem; padding: 1.5rem 0; border-bottom: 1px solid #d9e1eb; }
+    .ref-year { padding-top: .15rem; color: var(--blue); font: 800 .95rem var(--display); }
+    .ref-kind { color: var(--muted); font-size: .72rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .ref-cite { margin: .35rem 0 0; color: var(--ink); line-height: 1.6; }
+    .ref-note { margin: .35rem 0 0; color: var(--ink-soft); font-size: .95rem; }
+    .ref-key { padding-inline: 1rem; margin-inline: -1rem; border-radius: 10px; background: var(--blue-soft); border-bottom-color: transparent; }
+    .ref-key .ref-kind { color: var(--blue); }
+
+    /* ---------- Cierre y footer ---------- */
+    .closing { background: var(--dark); color: #fff; }
+    .closing .eyebrow { color: #a9c5e0; }
+    .closing .sec-title { color: #fff; }
+    .closing .section-intro { color: #cfdae7; }
+    .takeaways { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 0; padding: 0; list-style: none; counter-reset: tk; }
+    .takeaways li { position: relative; padding: 1.4rem 1.5rem 1.4rem 4.2rem; border: 1px solid rgba(255,255,255,.14); border-radius: 12px; background: rgba(255,255,255,.06); color: #e5ebf3; line-height: 1.6; counter-increment: tk; }
+    .takeaways li::before { content: counter(tk, decimal-leading-zero); position: absolute; left: 1.4rem; top: 1.4rem; color: #a9c5e0; font: 800 1rem var(--display); }
+    .takeaways strong { color: #fff; }
+    .closing-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2.2rem; }
+    .site-footer { padding: 1.7rem 0 1rem; background: var(--darker); color: #c3cfdd; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding-bottom: 1.4rem; }
+    .footer-inner p { margin: 0; font-size: .85rem; }
+    .footer-brand .brand-name, .footer-brand .brand-name b { color: #e5ebf3; }
+    .footer-links { display: flex; gap: 1.2rem; font-size: .85rem; font-weight: 700; }
+    .footer-links a { color: #d9e4f0; }
+    .footer-links a:hover, .footer-links a:focus-visible { text-decoration: underline; }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,.12); color: #9fb0c4; font-size: .78rem; }
+
+    .to-top { position: fixed; right: 20px; bottom: 20px; z-index: 60; display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid #d4dce7; border-radius: 50%; background: #fff; color: var(--navy); font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 10px 25px rgba(25,47,77,.12); opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .25s, transform .25s; }
+    .to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+
+    /* Fade-in sutil */
+    .js .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+    .js .reveal.in { opacity: 1; transform: none; }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 1680px) {
+      .brand-name { display: none; }
+    }
+    @media (max-width: 1280px) {
+      .primary-nav { gap: clamp(.6rem, 1.2vw, 1rem); }
+    }
+    @media (max-width: 1260px) {
+      .primary-nav a .n { display: none; }
+    }
+    @media (max-width: 900px) {
+      :root { --header-h: 68px; }
+      .shell { width: min(100% - 36px, 720px); }
+      .brand-name { display: grid; }
+      .menu-toggle { display: flex; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 9px; background: #fff; cursor: pointer; }
+      .menu-toggle span { width: 18px; height: 2px; margin-inline: auto; background: var(--ink); }
+      .primary-nav { display: none; position: absolute; top: calc(100% + 1px); left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; padding: .6rem 18px 1rem; background: rgba(247,248,251,.98); border-bottom: 1px solid var(--line); box-shadow: 0 18px 25px rgba(25,47,77,.08); max-height: calc(100vh - var(--header-h)); overflow-y: auto; }
+      .primary-nav.open { display: flex; }
+      .primary-nav a { padding: .8rem .3rem; border-bottom: 1px solid #e9edf3; font-size: .95rem; }
+      .primary-nav a .n { display: inline; }
+      .primary-nav a::after { display: none; }
+      .hero { grid-template-columns: 1fr; min-height: 0; gap: 2rem; padding-top: 3.5rem; }
+      .hero-visual { width: min(100%, 520px); margin-inline: auto; min-height: 0; padding-block: 1.5rem; }
+      .compare, .idea-layout, .anat, .demo-problem { grid-template-columns: minmax(0, 1fr); }
+      .anat > *, .idea-layout > *, .demo-problem > * { min-width: 0; }
+      .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-3 > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+      .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .flow-h { display: none; }
+      .flow-v { display: block; }
+      .timeline { grid-template-columns: minmax(0, 1fr); gap: 1.8rem; }
+      .timeline::before { top: 0; bottom: 0; left: 8px; right: auto; width: 2px; height: auto; background: linear-gradient(180deg, var(--blue), #6b9a86); }
+      .tl-item { padding: 0 0 0 2.6rem; }
+      .tl-item::before { top: .3rem; }
+      .takeaways, .open-list { grid-template-columns: minmax(0, 1fr); }
+      .footer-inner { flex-wrap: wrap; }
+    }
+    @media (max-width: 600px) {
+      body { font-size: 1.0625rem; }
+      .shell { width: calc(100% - 32px); }
+      .section { padding-block: 3rem; }
+      .brand-name { font-size: .7rem; }
+      .brand-name b { font-size: .78rem; }
+      .hero { padding-top: 2.6rem; padding-bottom: 3rem; }
+      .hero h1 { font-size: clamp(2.5rem, 12vw, 3.3rem); }
+      .hero-actions .button { width: 100%; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: minmax(0, 1fr); }
+      .grid-3 > :last-child:nth-child(odd) { grid-column: auto; }
+      .panels-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem .75rem; }
+      .panels-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem .5rem; }
+      .compare-card { min-height: 0; }
+      .keyquote { padding: 1.2rem 1.25rem; }
+      .card, .big-card { padding: 1.25rem; }
+      .data-table { font-size: .9rem; }
+      .data-table th, .data-table td { padding: .6rem .7rem; }
+      .takeaways li { padding: 1.2rem 1.2rem 1.2rem 3.6rem; }
+      .takeaways li::before { left: 1.15rem; top: 1.2rem; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .footer-bottom { flex-direction: column; gap: .35rem; }
+      .ref-item { grid-template-columns: minmax(0, 1fr); gap: .3rem; }
+      .ref-key { margin-inline: -.75rem; padding-inline: .75rem; }
+      .to-top { right: 14px; bottom: 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+      .js .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="nav-wrap shell">
+      <a class="brand" href="#inicio" aria-label="Programación Genética, ir al inicio de la clase">
+        <img class="brand-mark" src="logo-square.png" alt="" width="39" height="39">
+        <span class="brand-name"><b>Programación Genética</b>Dr. José Manuel Muñoz Contreras</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Abrir menú de secciones" aria-expanded="false" aria-controls="primary-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="primary-nav" class="primary-nav" aria-label="Secciones de la clase">
+        <a href="#por-que"><span class="n">01</span>Por qué</a>
+        <a href="#idea"><span class="n">02</span>Idea central</a>
+        <a href="#anatomia"><span class="n">03</span>Anatomía</a>
+        <a href="#historia"><span class="n">04</span>Historia</a>
+        <a href="#relevancia"><span class="n">05</span>Relevancia</a>
+        <a href="#aplicaciones"><span class="n">06</span>Aplicaciones</a>
+        <a href="#investigacion"><span class="n">07</span>Investigación</a>
+        <a href="#problemas"><span class="n">08</span>Problemas</a>
+        <a href="#demo"><span class="n">09</span>Demo</a>
+        <a href="#cierre"><span class="n">10</span>Cierre</a>
+        <a href="#referencias"><span class="n">11</span>Referencias</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ═════════════ HERO ═════════════ -->
+    <section id="inicio" class="hero shell" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <h1 id="hero-title">Programación Genética</h1>
+        <p class="hero-sub">Cuando los algoritmos evolucionan sus propias fórmulas</p>
+        <p class="hero-lead">Una clase introductoria para quienes nunca han trabajado con Programación Genética (GP). Recorreremos cada elemento del algoritmo, cómo se representa y cómo, generación tras generación, descubre por sí solo la fórmula <code>x² + x</code>.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#por-que">Comenzar la clase <span aria-hidden="true">↓</span></a>
+          <a class="button button-secondary" href="#anatomia">Ir a la anatomía de GP</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <span class="orbit orbit-one" aria-hidden="true"></span>
+        <span class="orbit orbit-two" aria-hidden="true"></span>
+        <div class="hero-card">
+          <div class="hero-card-top" aria-hidden="true"><span>Mejor individuo</span><span>y = x² + x</span></div>
+          <svg class="diagram" viewBox="0 0 480 350" role="img" aria-labelledby="hero-svg-t hero-svg-d">
+            <title id="hero-svg-t">Un árbol de expresión que evoluciona</title>
+            <desc id="hero-svg-d">En la generación 0 el mejor programa es solo la hoja x, con error medio 4.67. Tras la evolución, en la generación 9, el mejor programa es el árbol más x con un subárbol x por x, es decir x al cuadrado más x, con error 0.</desc>
+            <defs><marker id="arr-hero" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrowhead" d="M0 0 10 5 0 10z"/></marker></defs>
+            <rect x="22" y="118" width="116" height="132" rx="14" fill="#f7f8fb" stroke="#e2e7ef"/>
+            <g class="nd leaf"><circle cx="80" cy="172" r="24"/><text x="80" y="172">x</text></g>
+            <text class="note mid" x="80" y="222">Gen. 0</text>
+            <text class="note mid warn" x="80" y="240">MAE 4.67</text>
+            <path class="arrow soft" d="M148 184 C 182 140, 222 140, 248 176" marker-end="url(#arr-hero)"/>
+            <text class="note mid" x="198" y="128">evolución</text>
+            <line class="edge" x1="360" y1="66" x2="300" y2="150"/>
+            <line class="edge" x1="360" y1="66" x2="420" y2="150"/>
+            <line class="edge" x1="300" y1="150" x2="262" y2="234"/>
+            <line class="edge" x1="300" y1="150" x2="338" y2="234"/>
+            <g class="nd fn"><circle cx="360" cy="66" r="24"/><text x="360" y="66">+</text></g>
+            <g class="nd fn"><circle cx="300" cy="150" r="24"/><text x="300" y="150">*</text></g>
+            <g class="nd leaf"><circle cx="420" cy="150" r="24"/><text x="420" y="150">x</text></g>
+            <g class="nd leaf"><circle cx="262" cy="234" r="24"/><text x="262" y="234">x</text></g>
+            <g class="nd leaf"><circle cx="338" cy="234" r="24"/><text x="338" y="234">x</text></g>
+            <text class="lbl-mono" x="340" y="296">(+ (* x x) x)</text>
+            <text class="note mid ok" x="340" y="322">Gen. 9 · MAE 0</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════════ 01 CAJA NEGRA ═════════════ -->
+    <section id="por-que" class="section tinted" aria-labelledby="s1-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow"><span class="eyebrow-line"></span>El problema de la caja negra</p>
+          <h2 id="s1-title" class="sec-title"><span class="sec-num">01 —</span> Por qué GP importa hoy</h2>
+          <p class="section-intro">El Deep Learning es extraordinariamente potente, pero sus decisiones quedan repartidas en millones de parámetros que nadie puede leer. En dominios críticos —medicina, finanzas, defensa— no basta con acertar: hay que poder <strong>explicar, auditar y justificar</strong> cada predicción. Ahí entra GP.</p>
+        </div>
+
+        <div class="compare reveal">
+          <article class="compare-card compare-dl" aria-labelledby="dl-title">
+            <span class="compare-label">Deep Learning</span>
+            <svg class="compare-icon" viewBox="0 0 64 64" aria-hidden="true">
+              <path d="M32 6 56 19v26L32 58 8 45V19z" fill="#0b111c" stroke="#8796ad" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M8 19l24 13 24-13M32 32v26" stroke="#8796ad" stroke-width="2" fill="none" stroke-linejoin="round"/>
+              <text x="32" y="21" fill="#fff" font-family="Manrope, sans-serif" font-weight="800" font-size="12" text-anchor="middle" dominant-baseline="central">?</text>
+            </svg>
+            <h3 id="dl-title">Una caja negra</h3>
+            <p>Millones de pesos, decisión ininterpretable. Sabemos <em>qué</em> predice, pero no <em>por qué</em>.</p>
+            <div class="compare-weights" aria-label="Ejemplo de pesos numéricos ilegibles">w = [0.0213, −1.274, 0.889, 0.0041, −0.3317, 2.106, …] × 10⁶</div>
+          </article>
+          <article class="compare-card compare-gp" aria-labelledby="gp-title">
+            <span class="compare-label">GP</span>
+            <svg class="compare-icon" viewBox="0 0 64 64" aria-hidden="true">
+              <rect x="5" y="10" width="54" height="44" rx="10" fill="#dcebe4" stroke="#2f7a5b" stroke-width="2"/>
+              <text x="32" y="32" fill="#1f4d3a" font-family="JetBrains Mono, monospace" font-weight="700" font-size="16" text-anchor="middle" dominant-baseline="central">f(x)</text>
+            </svg>
+            <h3 id="gp-title">Una fórmula legible</h3>
+            <p>Ecuación explícita, auditable, explicable. Cada término puede inspeccionarse, simplificarse y discutirse con un experto del dominio.</p>
+            <div class="compare-formula">riesgo = 0.8·edad + presión / 10</div>
+          </article>
+        </div>
+
+        <blockquote class="keyquote reveal">
+          <p>«GP no te da una caja negra: te entrega una fórmula que puedes leer.»</p>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ═════════════ 02 IDEA CENTRAL ═════════════ -->
+    <section id="idea" class="section" aria-labelledby="s2-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow"><span class="eyebrow-line"></span>¿Qué es GP?</p>
+          <h2 id="s2-title" class="sec-title"><span class="sec-num">02 —</span> La idea central</h2>
+        </div>
+        <p class="definition reveal">GP es un algoritmo evolutivo que <strong>genera, combina y selecciona programas de computadora</strong> —normalmente fórmulas— imitando la selección natural, hasta encontrar uno que resuelva el problema.</p>
+
+        <div class="idea-layout">
+          <div class="concepts reveal">
+            <article class="card concept">
+              <div class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M10.8 7.2 7.2 15.8M13.2 7.2l3.6 8.6"/></svg></div>
+              <div>
+                <span class="concept-num">CONCEPTO 1</span>
+                <h3>Individuo = programa (árbol)</h3>
+                <p>Cada solución candidata es un programa completo, representado como un árbol de operaciones y variables.</p>
+              </div>
+            </article>
+            <article class="card concept">
+              <div class="icon-box green" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="2.5"/><circle cx="18" cy="7" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="6" cy="17" r="2.5"/><circle cx="18" cy="17" r="2.5"/></svg></div>
+              <div>
+                <span class="concept-num">CONCEPTO 2</span>
+                <h3>Población = muchos programas</h3>
+                <p>Se trabaja con un conjunto de cientos o miles de programas candidatos a la vez, no con una sola solución.</p>
+              </div>
+            </article>
+            <article class="card concept">
+              <div class="icon-box orange" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 9"/><path d="M20 4v5h-5"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 15"/><path d="M4 20v-5h5"/></svg></div>
+              <div>
+                <span class="concept-num">CONCEPTO 3</span>
+                <h3>Evolución = selección + cruce + mutación</h3>
+                <p>Los mejores programas se reproducen y se modifican; generación tras generación, la población mejora.</p>
+              </div>
+            </article>
+          </div>
+
+          <figure class="figure reveal">
+            <svg class="diagram" viewBox="0 0 460 300" role="img" aria-labelledby="s2-svg-t s2-svg-d">
+              <title id="s2-svg-t">Árbol de expresión de x² + x</title>
+              <desc id="s2-svg-d">El nodo raíz es la suma. Su hijo izquierdo es una multiplicación de x por x y su hijo derecho es la hoja x. Los nodos internos son funciones (azul) y las hojas son terminales (verde).</desc>
+              <text class="lbl-mono" x="230" y="22">(+ (* x x) x)</text>
+              <line class="edge" x1="230" y1="72" x2="160" y2="157"/>
+              <line class="edge" x1="230" y1="72" x2="300" y2="157"/>
+              <line class="edge" x1="160" y1="157" x2="115" y2="242"/>
+              <line class="edge" x1="160" y1="157" x2="205" y2="242"/>
+              <g class="nd fn"><circle cx="230" cy="72" r="23"/><text x="230" y="72">+</text></g>
+              <g class="nd fn"><circle cx="160" cy="157" r="23"/><text x="160" y="157">*</text></g>
+              <g class="nd leaf"><circle cx="300" cy="157" r="23"/><text x="300" y="157">x</text></g>
+              <g class="nd leaf"><circle cx="115" cy="242" r="23"/><text x="115" y="242">x</text></g>
+              <g class="nd leaf"><circle cx="205" cy="242" r="23"/><text x="205" y="242">x</text></g>
+              <text class="note" x="262" y="66">← raíz: salida del programa</text>
+              <text class="note" x="20" y="161">función →</text>
+              <text class="note" x="332" y="161">← terminal (hoja)</text>
+              <text class="lbl-mono" x="230" y="292">= x² + x</text>
+            </svg>
+            <div class="legend" aria-hidden="true"><span><i class="l-fn"></i>Nodo interno: función</span><span><i class="l-leaf"></i>Hoja: terminal</span></div>
+            <figcaption>Se lee de abajo hacia arriba: primero <code>x*x</code>, luego se le suma <code>x</code>. En notación prefija (estilo Lisp, la de Koza): <code>(+ (* x x) x)</code>.</figcaption>
+          </figure>
+        </div>
+
+        <p class="callout green reveal">GP evoluciona programas, no pesos.</p>
+      </div>
+    </section>
+
+    <!-- ═════════════ 03 ANATOMÍA ═════════════ -->
+    <section id="anatomia" class="section tinted" aria-labelledby="s3-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow"><span class="eyebrow-line"></span>La sección más importante</p>
+          <h2 id="s3-title" class="sec-title"><span class="sec-num">03 —</span> Anatomía de GP: elementos y representación</h2>
+          <p class="section-intro">Cada componente, con su representación visual y un ejemplo numérico sobre <code>y = x² + x</code>.</p>
+        </div>
+
+        <div class="problem-strip reveal" role="note" aria-label="Problema de ejemplo">
+          <strong>Problema guía:</strong>
+          <span>encontrar la fórmula que genera estos datos</span>
+          <span class="data">x = 1, 2, 3 → y = 2, 6, 12</span>
+          <span>· Funciones <span class="data">{+, −, *, /}</span> · Terminales <span class="data">{x, 1}</span></span>
+        </div>
+
+        <nav aria-label="Elementos de la anatomía">
+          <ul class="anat-nav">
+            <li><a href="#el-1"><b>3.1</b>Individuo</a></li>
+            <li><a href="#el-2"><b>3.2</b>Población</a></li>
+            <li><a href="#el-3"><b>3.3</b>Fitness</a></li>
+            <li><a href="#el-4"><b>3.4</b>Selección</a></li>
+            <li><a href="#el-5"><b>3.5</b>Cruce</a></li>
+            <li><a href="#el-6"><b>3.6</b>Mutación</a></li>
+            <li><a href="#el-7"><b>3.7</b>Inicialización</a></li>
+            <li><a href="#el-8"><b>3.8</b>Parada</a></li>
+            <li><a href="#el-9"><b>3.9</b>Bloat</a></li>
+            <li><a href="#el-flow"><b>↻</b>Bucle completo</a></li>
+          </ul>
+        </nav>
+
+        <!-- 3.1 Individuo -->
+        <article id="el-1" class="anat reveal" aria-labelledby="el-1-t">
+          <div>
+            <p class="anat-num">3.1 · Individuo</p>
+            <h3 id="el-1-t">Árbol de expresión</h3>
+            <p class="def">Un individuo es un programa completo, representado como un árbol cuya evaluación produce una salida.</p>
+            <ul class="points">
+              <li><strong>Nodos internos (funciones):</strong> <code>+</code> <code>−</code> <code>*</code> <code>/</code> <code>sin</code> <code>cos</code> <code>exp</code> <code>log</code> <code>if</code>. Reciben argumentos de sus hijos.</li>
+              <li><strong>Nodos hoja (terminales):</strong> variables <code>x</code>, <code>y</code>, <code>z</code> y constantes como <code>1</code> o <code>3.14</code>.</li>
+              <li><strong>Raíz:</strong> su valor es la salida del programa.</li>
+              <li>La <strong>profundidad</strong> mide la longitud del camino más largo desde la raíz; el <strong>tamaño</strong>, el número de nodos.</li>
+            </ul>
+            <div class="example-box">
+              <h4>Ejemplo numérico · x = 2</h4>
+              <p>Se evalúa desde las hojas hacia la raíz:</p>
+              <span class="calc">x = 2 → (* x x) = 4 → (+ 4 x) = 6 ✓ (y real = 6)</span>
+              <p>Profundidad = 2 · Tamaño = 5 nodos.</p>
+            </div>
+          </div>
+          <figure class="figure">
+            <svg class="diagram" viewBox="0 0 480 290" role="img" aria-labelledby="el1-svg-t el1-svg-d">
+              <title id="el1-svg-t">Árbol de x*x + x rotulado y evaluado en x = 2</title>
+              <desc id="el1-svg-d">Profundidad 0: raíz suma, vale 6. Profundidad 1: multiplicación que vale 4 y hoja x que vale 2. Profundidad 2: dos hojas x que valen 2.</desc>
+              <line class="guide" x1="80" y1="50" x2="470" y2="50"/>
+              <line class="guide" x1="80" y1="140" x2="470" y2="140"/>
+              <line class="guide" x1="80" y1="230" x2="470" y2="230"/>
+              <text class="note" x="8" y="54">prof. 0</text>
+              <text class="note" x="8" y="144">prof. 1</text>
+              <text class="note" x="8" y="234">prof. 2</text>
+              <line class="edge" x1="270" y1="50" x2="200" y2="140"/>
+              <line class="edge" x1="270" y1="50" x2="340" y2="140"/>
+              <line class="edge" x1="200" y1="140" x2="160" y2="230"/>
+              <line class="edge" x1="200" y1="140" x2="240" y2="230"/>
+              <g class="nd fn"><circle cx="270" cy="50" r="22"/><text x="270" y="50">+</text></g>
+              <g class="nd fn"><circle cx="200" cy="140" r="22"/><text x="200" y="140">*</text></g>
+              <g class="nd leaf"><circle cx="340" cy="140" r="22"/><text x="340" y="140">x</text></g>
+              <g class="nd leaf"><circle cx="160" cy="230" r="22"/><text x="160" y="230">x</text></g>
+              <g class="nd leaf"><circle cx="240" cy="230" r="22"/><text x="240" y="230">x</text></g>
+              <g class="val"><rect x="294" y="16" width="30" height="20" rx="6"/><text x="309" y="26">6</text></g>
+              <g class="val"><rect x="222" y="106" width="30" height="20" rx="6"/><text x="237" y="116">4</text></g>
+              <g class="val"><rect x="364" y="106" width="30" height="20" rx="6"/><text x="379" y="116">2</text></g>
+              <g class="val"><rect x="182" y="196" width="30" height="20" rx="6"/><text x="197" y="206">2</text></g>
+              <g class="val"><rect x="262" y="196" width="30" height="20" rx="6"/><text x="277" y="206">2</text></g>
+              <text class="note" x="300" y="56">raíz = salida</text>
+              <text class="lbl-mono" x="270" y="280">x*x + x</text>
+            </svg>
+            <div class="legend" aria-hidden="true"><span><i class="l-fn"></i>Función</span><span><i class="l-leaf"></i>Terminal</span><span><i class="l-val"></i>Valor del nodo con x = 2</span></div>
+          </figure>
+        </article>
+
+        <!-- 3.2 Población -->
+        <article id="el-2" class="anat reveal" aria-labelledby="el-2-t">
+          <div>
+            <p class="anat-num">3.2 · Población</p>
+            <h3 id="el-2-t">Un bosque de programas</h3>
+            <p class="def">La población es el conjunto de individuos (árboles) que coexisten en una generación.</p>
+            <ul class="points">
+              <li><strong>Tamaño:</strong> típicamente de 100 a 10 000 individuos.</li>
+              <li><strong>Profundidad máxima:</strong> limita el crecimiento de los árboles (Koza usó 17 tras el cruce).</li>
+              <li><strong>Diversidad:</strong> formas y contenidos distintos; sin ella la búsqueda se estanca.</li>
+            </ul>
+          </div>
+          <figure class="figure">
+            <div class="panels panels-5" role="group" aria-label="Población de cinco árboles en la generación 0">
+              <div class="panel">
+                <svg class="diagram sm" viewBox="0 0 130 170" role="img" aria-label="Individuo 1: la hoja x">
+                  <g class="nd leaf"><circle cx="65" cy="85" r="18"/><text x="65" y="85">x</text></g>
+                </svg>
+                <span class="panel-cap">#1 x</span>
+              </div>
+              <div class="panel">
+                <svg class="diagram sm" viewBox="0 0 130 170" role="img" aria-label="Individuo 2: x más 1">
+                  <line class="edge" x1="65" y1="50" x2="35" y2="120"/><line class="edge" x1="65" y1="50" x2="95" y2="120"/>
+                  <g class="nd fn"><circle cx="65" cy="50" r="18"/><text x="65" y="50">+</text></g>
+                  <g class="nd leaf"><circle cx="35" cy="120" r="18"/><text x="35" y="120">x</text></g>
+                  <g class="nd leaf"><circle cx="95" cy="120" r="18"/><text x="95" y="120">1</text></g>
+                </svg>
+                <span class="panel-cap">#2 x+1</span>
+              </div>
+              <div class="panel">
+                <svg class="diagram sm" viewBox="0 0 130 170" role="img" aria-label="Individuo 3: x por x">
+                  <line class="edge" x1="65" y1="50" x2="35" y2="120"/><line class="edge" x1="65" y1="50" x2="95" y2="120"/>
+                  <g class="nd fn"><circle cx="65" cy="50" r="18"/><text x="65" y="50">*</text></g>
+                  <g class="nd leaf"><circle cx="35" cy="120" r="18"/><text x="35" y="120">x</text></g>
+                  <g class="nd leaf"><circle cx="95" cy="120" r="18"/><text x="95" y="120">x</text></g>
+                </svg>
+                <span class="panel-cap">#3 x*x</span>
+              </div>
+              <div class="panel">
+                <svg class="diagram sm" viewBox="0 0 130 170" role="img" aria-label="Individuo 4: x más x">
+                  <line class="edge" x1="65" y1="50" x2="35" y2="120"/><line class="edge" x1="65" y1="50" x2="95" y2="120"/>
+                  <g class="nd fn"><circle cx="65" cy="50" r="18"/><text x="65" y="50">+</text></g>
+                  <g class="nd leaf"><circle cx="35" cy="120" r="18"/><text x="35" y="120">x</text></g>
+                  <g class="nd leaf"><circle cx="95" cy="120" r="18"/><text x="95" y="120">x</text></g>
+                </svg>
+                <span class="panel-cap">#4 x+x</span>
+              </div>
+              <div class="panel">
+                <svg class="diagram sm" viewBox="0 0 130 170" role="img" aria-label="Individuo 5: x por x más x">
+                  <line class="edge" x1="70" y1="25" x2="44" y2="85"/><line class="edge" x1="70" y1="25" x2="106" y2="85"/>
+                  <line class="edge" x1="44" y1="85" x2="22" y2="145"/><line class="edge" x1="44" y1="85" x2="68" y2="145"/>
+                  <g class="nd fn"><circle cx="70" cy="25" r="18"/><text x="70" y="25">+</text></g>
+                  <g class="nd fn"><circle cx="44" cy="85" r="18"/><text x="44" y="85">*</text></g>
+                  <g class="nd leaf"><circle cx="106" cy="85" r="18"/><text x="106" y="85">x</text></g>
+                  <g class="nd leaf"><circle cx="22" cy="145" r="18"/><text x="22" y="145">x</text></g>
+                  <g class="nd leaf"><circle cx="68" cy="145" r="18"/><text x="68" y="145">x</text></g>
+                </svg>
+                <span class="panel-cap">#5 x*x+x</span>
+              </div>
+            </div>
+            <figcaption>Una población diminuta de 5 árboles (en la práctica serían cientos). La usaremos en todo el resto de la sección.</figcaption>
+          </figure>
+          <div class="anat-full">
+            <div class="table-wrap">
+              <table class="data-table">
+                <caption>Población de ejemplo en la generación 0</caption>
+                <thead><tr><th scope="col">Individuo</th><th scope="col">Fórmula</th><th scope="col">Notación prefija</th><th scope="col" class="num">Profundidad</th><th scope="col" class="num">Tamaño</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">#1</th><td class="f">x</td><td class="f">x</td><td class="num">0</td><td class="num">1</td></tr>
+                  <tr><th scope="row">#2</th><td class="f">x + 1</td><td class="f">(+ x 1)</td><td class="num">1</td><td class="num">3</td></tr>
+                  <tr><th scope="row">#3</th><td class="f">x * x</td><td class="f">(* x x)</td><td class="num">1</td><td class="num">3</td></tr>
+                  <tr><th scope="row">#4</th><td class="f">x + x</td><td class="f">(+ x x)</td><td class="num">1</td><td class="num">3</td></tr>
+                  <tr><th scope="row">#5</th><td class="f">x * x + x</td><td class="f">(+ (* x x) x)</td><td class="num">2</td><td class="num">5</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3.3 Fitness -->
+        <article id="el-3" class="anat reveal" aria-labelledby="el-3-t">
+          <div>
+            <p class="anat-num">3.3 · Función de aptitud</p>
+            <h3 id="el-3-t">Fitness: ¿qué tan bueno es cada programa?</h3>
+            <p class="def">El fitness es un número que mide qué tan bien resuelve el problema cada individuo; es la única «brújula» que guía la evolución.</p>
+            <ul class="points">
+              <li>En regresión simbólica se usa un error, p. ej. el <strong>MAE</strong> (error absoluto medio): <span class="mono">MAE = (1/n) · Σ |yᵢ − ŷᵢ|</span>.</li>
+              <li>Para que «más alto sea mejor», lo convertimos: <span class="mono">fitness = 1 / (1 + MAE)</span>, que vale 1 en el óptimo.</li>
+            </ul>
+          </div>
+          <div class="example-box" style="margin-top:0">
+            <h4>Ejemplo numérico · individuo #3 (x*x)</h4>
+            <p>Predicciones: 1, 4, 9 frente a los valores reales 2, 6, 12.</p>
+            <span class="calc">|2−1| + |6−4| + |12−9| = 1 + 2 + 3 = 6<br>MAE = 6 / 3 = 2.00 → fitness = 1 / 3 = 0.333</span>
+          </div>
+          <div class="anat-full">
+            <div class="table-wrap">
+              <table class="data-table">
+                <caption>Evaluación de la población sobre x = 1, 2, 3 (y real = 2, 6, 12)</caption>
+                <thead><tr><th scope="col">Ind.</th><th scope="col">Fórmula</th><th scope="col" class="num">ŷ(1)</th><th scope="col" class="num">ŷ(2)</th><th scope="col" class="num">ŷ(3)</th><th scope="col" class="num">MAE</th><th scope="col">Fitness 1/(1+MAE)</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">#1</th><td class="f">x</td><td class="num">1</td><td class="num">2</td><td class="num">3</td><td class="num">4.67</td><td><span class="fbar" style="width:12px" aria-hidden="true"></span><span class="mono">0.176</span></td></tr>
+                  <tr><th scope="row">#2</th><td class="f">x + 1</td><td class="num">2</td><td class="num">3</td><td class="num">4</td><td class="num">3.67</td><td><span class="fbar" style="width:15px" aria-hidden="true"></span><span class="mono">0.214</span></td></tr>
+                  <tr><th scope="row">#3</th><td class="f">x * x</td><td class="num">1</td><td class="num">4</td><td class="num">9</td><td class="num">2.00</td><td><span class="fbar" style="width:23px" aria-hidden="true"></span><span class="mono">0.333</span></td></tr>
+                  <tr><th scope="row">#4</th><td class="f">x + x</td><td class="num">2</td><td class="num">4</td><td class="num">6</td><td class="num">2.67</td><td><span class="fbar" style="width:19px" aria-hidden="true"></span><span class="mono">0.273</span></td></tr>
+                  <tr class="best"><th scope="row">#5</th><td class="f">x * x + x <span class="badge">óptimo</span></td><td class="num">2</td><td class="num">6</td><td class="num">12</td><td class="num">0.00</td><td><span class="fbar" style="width:70px" aria-hidden="true"></span><span class="mono">1.000</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="callout orange">Un mal fitness = GP no converge o sobreajusta. Si la métrica no refleja lo que de verdad importa, la evolución optimizará lo equivocado.</p>
+          </div>
+        </article>
+
+        <!-- 3.4 Selección -->
+        <article id="el-4" class="anat reveal" aria-labelledby="el-4-t">
+          <div>
+            <p class="anat-num">3.4 · Selección</p>
+            <h3 id="el-4-t">¿Quién se reproduce?</h3>
+            <p class="def">La selección elige qué individuos serán padres de la siguiente generación, favoreciendo a los de mejor fitness.</p>
+            <ul class="points">
+              <li>Si la presión es <strong>demasiado alta</strong>, todos copian al mejor y se pierde diversidad (convergencia prematura).</li>
+              <li>Si es <strong>demasiado baja</strong>, la búsqueda avanza al azar.</li>
+            </ul>
+            <p class="callout">Presión selectiva sin perder diversidad.</p>
+          </div>
+          <div class="stack">
+            <div class="mini-card">
+              <h4>Torneo (k = 3)</h4>
+              <p>Se sortean k individuos al azar y gana el de mejor fitness. Con k controlamos la presión.</p>
+              <div class="tourney" role="list" aria-label="Torneo de ejemplo: candidatos sorteados">
+                <div class="cand" role="listitem"><span class="f">x</span><small>#1 · MAE 4.67</small></div>
+                <div class="cand" role="listitem"><span class="f">x + x</span><small>#4 · MAE 2.67</small></div>
+                <div class="cand win" role="listitem"><span class="f">x * x</span><small>#3 · MAE 2.00 · <strong>gana</strong></small></div>
+              </div>
+              <p style="margin-top:.7rem;font-size:.95rem">Observa que el óptimo (#5) no fue sorteado: el torneo deja oportunidades a otros, y eso preserva diversidad.</p>
+            </div>
+            <div class="mini-card">
+              <h4>Ruleta (proporcional al fitness)</h4>
+              <p>La probabilidad de ser elegido es fitness / Σ fitness.</p>
+              <div class="roulette" role="img" aria-label="Probabilidades de la ruleta: x*x+x 50.1 por ciento, x*x 16.7, x+x 13.7, x+1 10.7, x 8.8">
+                <span class="c1" style="width:50.1%">50.1%</span><span class="c2" style="width:16.7%">16.7%</span><span class="c3" style="width:13.7%">13.7%</span><span class="c4" style="width:10.7%"></span><span class="c5" style="width:8.8%"></span>
+              </div>
+              <div class="roulette-legend" aria-hidden="true"><span><i class="c1"></i>x*x+x</span><span><i class="c2"></i>x*x</span><span><i class="c3"></i>x+x</span><span><i class="c4"></i>x+1 (10.7%)</span><span><i class="c5"></i>x (8.8%)</span></div>
+            </div>
+            <div class="mini-card">
+              <h4>Elitismo</h4>
+              <p>Los mejores pasan <strong>intactos</strong> a la siguiente generación, para no perderlos por azar. <span class="ex">élite (1) → x*x + x se copia tal cual</span></p>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3.5 Cruce -->
+        <article id="el-5" class="anat reveal" aria-labelledby="el-5-t">
+          <div>
+            <p class="anat-num">3.5 · Cruce (crossover)</p>
+            <h3 id="el-5-t">Intercambiar subárboles</h3>
+            <p class="def">El cruce elige un punto (nodo) en cada padre e intercambia los subárboles que cuelgan de ellos, generando dos hijos.</p>
+            <ul class="points">
+              <li>Es el operador principal de GP (suele aplicarse con probabilidad ≈ 0.8–0.9).</li>
+              <li>Los hijos heredan «bloques de construcción» de ambos padres.</li>
+            </ul>
+            <div class="example-box">
+              <h4>Ejemplo numérico</h4>
+              <p>P1 = <code>x*x + x</code>, P2 = <code>x + 1</code>. Se intercambia el subárbol <code>x*x</code> de P1 con la hoja <code>x</code> de P2:</p>
+              <span class="calc">Hijo 1 = x + x   → ŷ = 2, 4, 6   (MAE 2.67)<br>Hijo 2 = x*x + 1 → ŷ = 2, 5, 10  (MAE 1.00)</span>
+            </div>
+            <p class="callout green">El cruce explora combinaciones nuevas de bloques que ya funcionaban.</p>
+          </div>
+          <div>
+            <details class="reveal-example" open>
+              <summary aria-label="Mostrar u ocultar el diagrama del cruce"><span class="when-closed">Ver ejemplo visual del cruce</span><span class="when-open">Ocultar ejemplo visual</span></summary>
+              <figure class="figure">
+                <div class="panels panels-2" role="group" aria-label="Cruce de subárboles: los padres x*x + x y x + 1 producen los hijos x + x y x*x + 1">
+                  <div class="panel">
+                    <svg class="diagram" viewBox="0 0 260 235" role="img" aria-label="Padre 1: x por x más x, con el subárbol x por x marcado como punto de cruce">
+                      <rect class="cut" x="10" y="92" width="140" height="136" rx="14"/>
+                      <line class="edge" x1="140" y1="40" x2="80" y2="120"/><line class="edge" x1="140" y1="40" x2="200" y2="120"/>
+                      <line class="edge" x1="80" y1="120" x2="40" y2="200"/><line class="edge" x1="80" y1="120" x2="120" y2="200"/>
+                      <g class="nd fn"><circle cx="140" cy="40" r="22"/><text x="140" y="40">+</text></g>
+                      <g class="nd fn"><circle cx="80" cy="120" r="22"/><text x="80" y="120">*</text></g>
+                      <g class="nd leaf"><circle cx="200" cy="120" r="22"/><text x="200" y="120">x</text></g>
+                      <g class="nd leaf"><circle cx="40" cy="200" r="22"/><text x="40" y="200">x</text></g>
+                      <g class="nd leaf"><circle cx="120" cy="200" r="22"/><text x="120" y="200">x</text></g>
+                    </svg>
+                    <span class="panel-cap"><b>Padre 1</b> · <code>x*x + x</code></span>
+                  </div>
+                  <div class="panel">
+                    <svg class="diagram" viewBox="0 0 260 235" role="img" aria-label="Padre 2: x más 1, con la hoja x marcada como punto de cruce">
+                      <rect class="cut" x="40" y="92" width="60" height="56" rx="12"/>
+                      <line class="edge" x1="130" y1="40" x2="70" y2="120"/><line class="edge" x1="130" y1="40" x2="190" y2="120"/>
+                      <g class="nd fn"><circle cx="130" cy="40" r="22"/><text x="130" y="40">+</text></g>
+                      <g class="nd leaf"><circle cx="70" cy="120" r="22"/><text x="70" y="120">x</text></g>
+                      <g class="nd leaf"><circle cx="190" cy="120" r="22"/><text x="190" y="120">1</text></g>
+                    </svg>
+                    <span class="panel-cap"><b>Padre 2</b> · <code>x + 1</code></span>
+                  </div>
+                  <div class="panel-divider" aria-hidden="true"><span>⇅ intercambio de subárboles</span></div>
+                  <div class="panel">
+                    <svg class="diagram" viewBox="0 0 260 235" role="img" aria-label="Hijo 1: x más x; la hoja x izquierda viene del padre 2">
+                      <rect class="cut" x="40" y="92" width="60" height="56" rx="12"/>
+                      <line class="edge" x1="130" y1="40" x2="70" y2="120"/><line class="edge" x1="130" y1="40" x2="190" y2="120"/>
+                      <g class="nd fn"><circle cx="130" cy="40" r="22"/><text x="130" y="40">+</text></g>
+                      <g class="nd leaf"><circle cx="70" cy="120" r="22"/><text x="70" y="120">x</text></g>
+                      <g class="nd leaf"><circle cx="190" cy="120" r="22"/><text x="190" y="120">x</text></g>
+                    </svg>
+                    <span class="panel-cap"><b>Hijo 1</b> · <code>x + x</code></span>
+                  </div>
+                  <div class="panel">
+                    <svg class="diagram" viewBox="0 0 260 235" role="img" aria-label="Hijo 2: x por x más 1; el subárbol x por x viene del padre 1">
+                      <rect class="cut" x="10" y="92" width="140" height="136" rx="14"/>
+                      <line class="edge" x1="140" y1="40" x2="80" y2="120"/><line class="edge" x1="140" y1="40" x2="200" y2="120"/>
+                      <line class="edge" x1="80" y1="120" x2="40" y2="200"/><line class="edge" x1="80" y1="120" x2="120" y2="200"/>
+                      <g class="nd fn"><circle cx="140" cy="40" r="22"/><text x="140" y="40">+</text></g>
+                      <g class="nd fn"><circle cx="80" cy="120" r="22"/><text x="80" y="120">*</text></g>
+                      <g class="nd leaf"><circle cx="200" cy="120" r="22"/><text x="200" y="120">1</text></g>
+                      <g class="nd leaf"><circle cx="40" cy="200" r="22"/><text x="40" y="200">x</text></g>
+                      <g class="nd leaf"><circle cx="120" cy="200" r="22"/><text x="120" y="200">x</text></g>
+                    </svg>
+                    <span class="panel-cap"><b>Hijo 2</b> · <code>x*x + 1</code></span>
+                  </div>
+                </div>
+                <div class="legend" aria-hidden="true"><span><i class="l-cut"></i>Subárbol en el punto de cruce</span><span><i class="l-fn"></i>Función</span><span><i class="l-leaf"></i>Terminal</span></div>
+              </figure>
+            </details>
+          </div>
+        </article>
+
+        <!-- 3.6 Mutación -->
+        <article id="el-6" class="anat reveal" aria-labelledby="el-6-t">
+          <div>
+            <p class="anat-num">3.6 · Mutación</p>
+            <h3 id="el-6-t">Pequeños cambios aleatorios</h3>
+            <p class="def">La mutación altera al azar una parte de un solo individuo para introducir material genético nuevo.</p>
+            <ul class="points">
+              <li>Evita que la población pierda funciones o terminales útiles.</li>
+              <li>Se aplica con <strong>tasa baja</strong>: entre 5 % y 10 % de los individuos.</li>
+            </ul>
+            <p class="callout orange">Exploración secundaria; tasa baja (5–10 %).</p>
+          </div>
+          <div>
+            <details class="reveal-example" open>
+              <summary aria-label="Mostrar u ocultar el diagrama de la mutación"><span class="when-closed">Ver ejemplo visual de la mutación</span><span class="when-open">Ocultar ejemplo visual</span></summary>
+              <figure class="figure">
+                <div class="panels panels-2" role="group" aria-label="Mutación de punto: la raíz suma de x*x + x se cambia por una multiplicación, dando x*x*x">
+                  <div class="panel">
+                    <svg class="diagram" viewBox="0 0 260 235" role="img" aria-label="Antes: x por x más x, con la raíz suma marcada">
+                      <circle class="cut" cx="140" cy="40" r="31"/>
+                      <line class="edge" x1="140" y1="40" x2="80" y2="120"/><line class="edge" x1="140" y1="40" x2="200" y2="120"/>
+                      <line class="edge" x1="80" y1="120" x2="40" y2="200"/><line class="edge" x1="80" y1="120" x2="120" y2="200"/>
+                      <g class="nd fn"><circle cx="140" cy="40" r="22"/><text x="140" y="40">+</text></g>
+                      <g class="nd fn"><circle cx="80" cy="120" r="22"/><text x="80" y="120">*</text></g>
+                      <g class="nd leaf"><circle cx="200" cy="120" r="22"/><text x="200" y="120">x</text></g>
+                      <g class="nd leaf"><circle cx="40" cy="200" r="22"/><text x="40" y="200">x</text></g>
+                      <g class="nd leaf"><circle cx="120" cy="200" r="22"/><text x="120" y="200">x</text></g>
+                    </svg>
+                    <span class="panel-cap"><b>Antes</b> · <code>x*x + x</code><br>ŷ = 2, 6, 12</span>
+                  </div>
+                  <div class="panel">
+                    <svg class="diagram" viewBox="0 0 260 235" role="img" aria-label="Después: x por x por x, con la raíz mutada a multiplicación">
+                      <line class="edge" x1="140" y1="40" x2="80" y2="120"/><line class="edge" x1="140" y1="40" x2="200" y2="120"/>
+                      <line class="edge" x1="80" y1="120" x2="40" y2="200"/><line class="edge" x1="80" y1="120" x2="120" y2="200"/>
+                      <g class="nd mut"><circle cx="140" cy="40" r="22"/><text x="140" y="40">*</text></g>
+                      <g class="nd fn"><circle cx="80" cy="120" r="22"/><text x="80" y="120">*</text></g>
+                      <g class="nd leaf"><circle cx="200" cy="120" r="22"/><text x="200" y="120">x</text></g>
+                      <g class="nd leaf"><circle cx="40" cy="200" r="22"/><text x="40" y="200">x</text></g>
+                      <g class="nd leaf"><circle cx="120" cy="200" r="22"/><text x="120" y="200">x</text></g>
+                    </svg>
+                    <span class="panel-cap"><b>Después</b> (punto: <code>+ → *</code>) · <code>x*x*x</code><br>ŷ = 1, 8, 27</span>
+                  </div>
+                </div>
+                <div class="legend" aria-hidden="true"><span><i class="l-cut"></i>Nodo elegido</span><span><i class="l-mut"></i>Nodo mutado</span></div>
+                <figcaption>Aquí la mutación empeora al individuo (MAE pasa de 0 a 6). Es normal: la mutación explora, y la selección se encarga de descartar los cambios malos.</figcaption>
+              </figure>
+            </details>
+          </div>
+          <div class="anat-full">
+            <div class="table-wrap">
+              <table class="data-table">
+                <caption>Tres tipos de mutación aplicados a x*x + x</caption>
+                <thead><tr><th scope="col">Tipo</th><th scope="col">Qué cambia</th><th scope="col">Cambio</th><th scope="col">Resultado</th><th scope="col" class="num">ŷ(1, 2, 3)</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">Punto</th><td class="wrap">Un nodo por otro de la misma aridad (nº de argumentos).</td><td class="f">+ → *</td><td class="f">x*x*x</td><td class="num">1, 8, 27</td></tr>
+                  <tr><th scope="row">Subárbol</th><td class="wrap">Un subárbol completo por uno nuevo generado al azar.</td><td class="f">x → (x − 1)</td><td class="f">x*x + (x − 1)</td><td class="num">1, 5, 11</td></tr>
+                  <tr><th scope="row">Hoja</th><td class="wrap">Un terminal por otro terminal (variable o constante).</td><td class="f">x → 2</td><td class="f">x*x + 2</td><td class="num">3, 6, 11</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3.7 Inicialización -->
+        <article id="el-7" class="anat reveal" aria-labelledby="el-7-t">
+          <div>
+            <p class="anat-num">3.7 · Inicialización</p>
+            <h3 id="el-7-t">Crear la generación 0</h3>
+            <p class="def">La inicialización construye al azar los árboles de la primera población, respetando una profundidad máxima.</p>
+            <p class="callout">Define el punto de partida de la búsqueda.</p>
+          </div>
+          <div class="stack">
+            <div class="mini-card">
+              <h4>Full</h4>
+              <p>Solo funciones hasta llegar a la profundidad máxima; todas las ramas tienen la misma longitud. Árboles «llenos».</p>
+            </div>
+            <div class="mini-card">
+              <h4>Grow</h4>
+              <p>En cada nodo se elige al azar entre funciones y terminales; si sale un terminal, la rama se cierra. Formas irregulares.</p>
+            </div>
+            <div class="mini-card">
+              <h4>Ramped half-and-half</h4>
+              <p>Propuesto por Koza: reparte la población entre varias profundidades y, en cada una, mitad Full y mitad Grow. Maximiza la diversidad inicial.</p>
+            </div>
+          </div>
+          <figure class="figure anat-full">
+            <div class="panels panels-4" role="group" aria-label="Método Grow paso a paso, profundidad máxima 2. Resultado: x + y*1">
+              <div class="panel">
+                <svg class="diagram" viewBox="0 0 220 215" role="img" aria-label="Paso 1: se elige la función suma como raíz">
+                  <line class="edge ghost" x1="110" y1="42" x2="60" y2="117"/><line class="edge ghost" x1="110" y1="42" x2="160" y2="117"/>
+                  <circle class="slot" cx="60" cy="117" r="20"/><circle class="slot" cx="160" cy="117" r="20"/>
+                  <g class="nd fn new"><circle cx="110" cy="42" r="20"/><text x="110" y="42">+</text></g>
+                </svg>
+                <span class="panel-cap"><b>1</b> Raíz: función <code>+</code></span>
+              </div>
+              <div class="panel">
+                <svg class="diagram" viewBox="0 0 220 215" role="img" aria-label="Paso 2: el hijo izquierdo es el terminal x y esa rama se cierra">
+                  <line class="edge" x1="110" y1="42" x2="60" y2="117"/><line class="edge ghost" x1="110" y1="42" x2="160" y2="117"/>
+                  <circle class="slot" cx="160" cy="117" r="20"/>
+                  <g class="nd fn"><circle cx="110" cy="42" r="20"/><text x="110" y="42">+</text></g>
+                  <g class="nd leaf new"><circle cx="60" cy="117" r="20"/><text x="60" y="117">x</text></g>
+                </svg>
+                <span class="panel-cap"><b>2</b> Hoja <code>x</code>: la rama se cierra</span>
+              </div>
+              <div class="panel">
+                <svg class="diagram" viewBox="0 0 220 215" role="img" aria-label="Paso 3: el hijo derecho es la función multiplicación">
+                  <line class="edge" x1="110" y1="42" x2="60" y2="117"/><line class="edge" x1="110" y1="42" x2="160" y2="117"/>
+                  <line class="edge ghost" x1="160" y1="117" x2="125" y2="192"/><line class="edge ghost" x1="160" y1="117" x2="195" y2="192"/>
+                  <circle class="slot" cx="125" cy="192" r="20"/><circle class="slot" cx="195" cy="192" r="20"/>
+                  <g class="nd fn"><circle cx="110" cy="42" r="20"/><text x="110" y="42">+</text></g>
+                  <g class="nd leaf"><circle cx="60" cy="117" r="20"/><text x="60" y="117">x</text></g>
+                  <g class="nd fn new"><circle cx="160" cy="117" r="20"/><text x="160" y="117">*</text></g>
+                </svg>
+                <span class="panel-cap"><b>3</b> Hijo derecho: función <code>*</code></span>
+              </div>
+              <div class="panel">
+                <svg class="diagram" viewBox="0 0 220 215" role="img" aria-label="Paso 4: los hijos de la multiplicación son los terminales y y 1; resultado x más y por 1">
+                  <line class="edge" x1="110" y1="42" x2="60" y2="117"/><line class="edge" x1="110" y1="42" x2="160" y2="117"/>
+                  <line class="edge" x1="160" y1="117" x2="125" y2="192"/><line class="edge" x1="160" y1="117" x2="195" y2="192"/>
+                  <g class="nd fn"><circle cx="110" cy="42" r="20"/><text x="110" y="42">+</text></g>
+                  <g class="nd leaf"><circle cx="60" cy="117" r="20"/><text x="60" y="117">x</text></g>
+                  <g class="nd fn"><circle cx="160" cy="117" r="20"/><text x="160" y="117">*</text></g>
+                  <g class="nd leaf new"><circle cx="125" cy="192" r="20"/><text x="125" y="192">y</text></g>
+                  <g class="nd leaf new"><circle cx="195" cy="192" r="20"/><text x="195" y="192">1</text></g>
+                </svg>
+                <span class="panel-cap"><b>4</b> Hojas <code>y</code>, <code>1</code> → <code>x + y*1</code></span>
+              </div>
+            </div>
+            <div class="legend" aria-hidden="true"><span><i class="l-cut" style="border-radius:50%"></i>Nodo recién creado</span><span><i style="box-shadow: inset 0 0 0 1.5px #b5c1d0; background: transparent"></i>Posición pendiente</span></div>
+            <figcaption>Método Grow con profundidad máxima 2 y conjunto de terminales {x, y, 1}. En el nivel máximo solo pueden elegirse terminales.</figcaption>
+          </figure>
+        </article>
+
+        <!-- 3.8 Criterios de parada -->
+        <article id="el-8" class="anat reveal" aria-labelledby="el-8-t">
+          <div>
+            <p class="anat-num">3.8 · Criterios de parada</p>
+            <h3 id="el-8-t">¿Cuándo detener la evolución?</h3>
+            <p class="def">Un criterio de parada decide cuándo termina el bucle y se reporta el mejor individuo encontrado.</p>
+            <p>En la práctica se combinan varios: el primero que se cumpla detiene la ejecución.</p>
+          </div>
+          <div class="grid-2">
+            <div class="mini-card">
+              <div class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4v16h16"/><path d="M8 16v-4M12 16V9M16 16V6"/></svg></div>
+              <h4>Máximo de generaciones</h4>
+              <p>Se fija un presupuesto de iteraciones.</p>
+              <span class="ex">G = 50 generaciones</span>
+            </div>
+            <div class="mini-card">
+              <div class="icon-box green" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg></div>
+              <h4>Fitness objetivo</h4>
+              <p>Se alcanzó un error suficientemente pequeño.</p>
+              <span class="ex">MAE ≤ 0.01</span>
+            </div>
+            <div class="mini-card">
+              <div class="icon-box sand" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 19c3-8 6-11 9-11h9"/><path d="M3 21h18"/></svg></div>
+              <h4>Estancamiento</h4>
+              <p>El mejor fitness no mejora durante varias generaciones.</p>
+              <span class="ex">20 generaciones sin mejora</span>
+            </div>
+            <div class="mini-card">
+              <div class="icon-box orange" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+              <h4>Tiempo máximo</h4>
+              <p>Límite de tiempo o de evaluaciones de fitness.</p>
+              <span class="ex">60 s · 10⁵ evaluaciones</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3.9 Bloat -->
+        <article id="el-9" class="anat reveal" aria-labelledby="el-9-t">
+          <div>
+            <p class="anat-num">3.9 · Control de bloat</p>
+            <h3 id="el-9-t">Árboles que engordan sin mejorar</h3>
+            <p class="def">El <em>bloat</em> es el crecimiento del tamaño de los árboles sin una mejora correspondiente del fitness.</p>
+            <p>Aparece código inútil («intrones») que no cambia la salida, pero vuelve los programas lentos de evaluar y difíciles de leer, justo lo contrario de lo que buscamos.</p>
+            <div class="example-box">
+              <h4>Ejemplo · mismo MAE = 0</h4>
+              <div class="size-bars">
+                <div class="size-row"><span class="f">x*x + x</span><div class="size-track"><i style="width:22%"></i>5 nodos</div></div>
+                <div class="size-row"><span class="f">x*x + x + (x − x) + 0*x</span><div class="size-track"><i class="bloat" style="width:58%"></i>13 nodos</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="mini-card">
+              <h4>Límite de profundidad</h4>
+              <p>Se rechazan los hijos que superen una profundidad máxima (Koza usó 17) y se conserva a un padre en su lugar.</p>
+            </div>
+            <div class="mini-card">
+              <h4>Presión de parsimonia</h4>
+              <p>Se penaliza el tamaño dentro del fitness: <span class="mono">error + α · tamaño</span>.</p>
+              <span class="ex">α = 0.01 → 0.05 (5 nodos) vs 0.13 (13 nodos)</span>
+            </div>
+            <div class="mini-card">
+              <h4>Cruce size-fair</h4>
+              <p>El subárbol que entra en el cruce debe tener un tamaño similar al que sale, para que los hijos no crezcan sin control.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Bucle completo -->
+        <div id="el-flow" class="flow-wrap reveal">
+          <div class="section-heading" style="margin-bottom:1.5rem">
+            <p class="eyebrow"><span class="eyebrow-line"></span>Todo junto</p>
+            <h3 class="sec-title" style="font-size:clamp(1.6rem,3vw,2.3rem)">El bucle completo de GP</h3>
+          </div>
+          <figure class="figure">
+            <svg class="diagram flow-h" viewBox="0 0 1160 300" role="img" aria-labelledby="flowh-t flowh-d">
+              <title id="flowh-t">Diagrama de flujo de GP</title>
+              <desc id="flowh-d">Inicialización, luego evaluación del fitness, luego la pregunta ¿parada? Si la respuesta es sí, se entrega el mejor individuo. Si es no, se hace selección, cruce y mutación, se forma la nueva población y se vuelve a la evaluación.</desc>
+              <defs><marker id="arr-flow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrowhead" d="M0 0 10 5 0 10z"/></marker></defs>
+              <g class="box start"><rect x="30" y="42" width="150" height="56" rx="10"/><text x="105" y="70">Inicialización</text></g>
+              <g class="box eval"><rect x="250" y="42" width="150" height="56" rx="10"/><text x="325" y="70">Evaluación</text></g>
+              <g class="decision"><polygon points="860,24 935,70 860,116 785,70"/><text x="860" y="70">¿Parada?</text></g>
+              <g class="box best"><rect x="990" y="42" width="150" height="56" rx="10"/><text x="1065" y="70">Mejor individuo</text></g>
+              <g class="box"><rect x="795" y="212" width="130" height="56" rx="10"/><text x="860" y="240">Selección</text></g>
+              <g class="box"><rect x="616" y="212" width="130" height="56" rx="10"/><text x="681" y="240">Cruce</text></g>
+              <g class="box mutb"><rect x="438" y="212" width="130" height="56" rx="10"/><text x="503" y="240">Mutación</text></g>
+              <g class="box"><rect x="260" y="212" width="130" height="56" rx="10"/><text x="325" y="240">Nueva población</text></g>
+              <path class="arrow" d="M180 70 H246" marker-end="url(#arr-flow)"/>
+              <path class="arrow" d="M400 70 H781" marker-end="url(#arr-flow)"/>
+              <text class="note mid" x="592" y="58">fitness de cada individuo</text>
+              <path class="arrow" d="M935 70 H986" marker-end="url(#arr-flow)"/>
+              <text class="note mid ok" x="961" y="58">Sí</text>
+              <path class="arrow" d="M860 116 V208" marker-end="url(#arr-flow)"/>
+              <text class="note warn" x="872" y="166">No</text>
+              <path class="arrow" d="M795 240 H750" marker-end="url(#arr-flow)"/>
+              <path class="arrow" d="M616 240 H572" marker-end="url(#arr-flow)"/>
+              <path class="arrow" d="M438 240 H394" marker-end="url(#arr-flow)"/>
+              <path class="arrow" d="M325 212 V102" marker-end="url(#arr-flow)"/>
+              <text class="note" x="337" y="160">generación t + 1</text>
+            </svg>
+            <svg class="diagram flow-v" viewBox="0 0 360 640" role="img" aria-labelledby="flowv-t flowv-d">
+              <title id="flowv-t">Diagrama de flujo de GP (vertical)</title>
+              <desc id="flowv-d">Inicialización, evaluación, ¿parada? Si no: selección, cruce, mutación, nueva población y regreso a evaluación. Si sí: mejor individuo.</desc>
+              <defs><marker id="arr-flowv" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrowhead" d="M0 0 10 5 0 10z"/></marker></defs>
+              <g class="box start"><rect x="90" y="10" width="180" height="46" rx="10"/><text x="180" y="33">Inicialización</text></g>
+              <g class="box eval"><rect x="90" y="90" width="180" height="46" rx="10"/><text x="180" y="113">Evaluación</text></g>
+              <g class="decision"><polygon points="180,160 260,200 180,240 100,200"/><text x="180" y="200">¿Parada?</text></g>
+              <g class="box"><rect x="90" y="270" width="180" height="46" rx="10"/><text x="180" y="293">Selección</text></g>
+              <g class="box"><rect x="90" y="346" width="180" height="46" rx="10"/><text x="180" y="369">Cruce</text></g>
+              <g class="box mutb"><rect x="90" y="422" width="180" height="46" rx="10"/><text x="180" y="445">Mutación</text></g>
+              <g class="box"><rect x="90" y="498" width="180" height="46" rx="10"/><text x="180" y="521">Nueva población</text></g>
+              <g class="box best"><rect x="90" y="580" width="180" height="46" rx="10"/><text x="180" y="603">Mejor individuo</text></g>
+              <path class="arrow" d="M180 56 V86" marker-end="url(#arr-flowv)"/>
+              <path class="arrow" d="M180 136 V156" marker-end="url(#arr-flowv)"/>
+              <path class="arrow" d="M180 240 V266" marker-end="url(#arr-flowv)"/>
+              <text class="note warn" x="190" y="258">No</text>
+              <path class="arrow" d="M180 316 V342" marker-end="url(#arr-flowv)"/>
+              <path class="arrow" d="M180 392 V418" marker-end="url(#arr-flowv)"/>
+              <path class="arrow" d="M180 468 V494" marker-end="url(#arr-flowv)"/>
+              <path class="arrow" d="M270 521 H320 V113 H274" marker-end="url(#arr-flowv)"/>
+              <text class="note" x="326" y="320">t+1</text>
+              <path class="arrow" d="M100 200 H40 V603 H86" marker-end="url(#arr-flowv)"/>
+              <text class="note ok" x="50" y="190">Sí</text>
+            </svg>
+          </figure>
+          <p class="keyquote">«Cada elemento tiene una representación concreta y un rol preciso en el bucle.»</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════════ 04 HISTORIA ═════════════ -->
+    <section id="historia" class="section" aria-labelledby="s4-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow"><span class="eyebrow-line"></span>Historia breve</p>
+          <h2 id="s4-title" class="sec-title"><span class="sec-num">04 —</span> De Koza a 2026</h2>
+          <p class="section-intro">Cuatro décadas de evolución de una idea: que los programas también pueden evolucionar.</p>
+        </div>
+        <ol class="timeline reveal">
+          <li class="tl-item">
+            <span class="tl-year">1985</span>
+            <h3>Cramer: programas como árboles</h3>
+            <p>Nichael L. Cramer usa por primera vez una representación en árbol dentro de un algoritmo genético para evolucionar programas sencillos.</p>
+          </li>
+          <li class="tl-item">
+            <span class="tl-year">1989–1992</span>
+            <h3>Koza formaliza GP</h3>
+            <p>John R. Koza publica sus primeros trabajos y, en 1992, el libro fundacional <em>Genetic Programming</em> (MIT Press), que da nombre y método al campo.</p>
+          </li>
+          <li class="tl-item">
+            <span class="tl-year">2000s–2010s</span>
+            <h3>Consolidación</h3>
+            <p>Aceleración con GPU, resultados «competitivos con humanos» y regresión simbólica en la industria (p. ej. Eureqa, 2009).</p>
+          </li>
+          <li class="tl-item">
+            <span class="tl-year">2024–2026</span>
+            <h3>GP + LLMs</h3>
+            <p>Evolutionary Coding Agents que usan LLMs como operadores de variación, regresión simbólica a gran escala y herramientas patentadas como Beagle.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ═════════════ 05 RELEVANCIA ═════════════ -->
+    <section id="relevancia" class="section tinted" aria-labelledby="s5-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow"><span class="eyebrow-line"></span>¿Por qué importa en 2026?</p>
+          <h2 id="s5-title" class="sec-title"><span class="sec-num">05 —</span> Por qué GP es relevante hoy</h2>
+        </div>
+        <div class="grid-3 reveal">
+          <article class="card big-card">
+            <span class="card-index">05 / 01</span>
+            <div class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <h3>Explicabilidad (XAI)</h3>
+            <p>Las fórmulas que produce GP pueden auditarse término a término. Eso las hace adecuadas para entornos regulados, donde cada decisión automática debe poder justificarse ante un experto o un auditor.</p>
+          </article>
+          <article class="card big-card">
+            <span class="card-index">05 / 02</span>
+            <div class="icon-box orange" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg></div>
+            <h3>Simbiosis con IA moderna</h3>
+            <p>Los LLMs proponen mutaciones y cruces «inteligentes» de código; GP aporta la búsqueda evolutiva y la evaluación rigurosa. A esto se suman la simplificación simbólica de modelos y los Evolutionary Coding Agents.</p>
+          </article>
+          <article class="card big-card">
+            <span class="card-index">05 / 03</span>
+            <div class="icon-box green" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3"/><path d="M7 15h10"/></svg></div>
+            <h3>Descubrimiento científico</h3>
+            <p>La regresión simbólica busca la ecuación que explica los datos, no solo una predicción. Se usa para proponer leyes y relaciones en física, biología y finanzas que luego el científico puede validar.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════════ 06 APLICACIONES ═════════════ -->
+    <section id="aplicaciones" class="section" aria-labelledby="s6-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow"><span class="eyebrow-line"></span>Aplicaciones concretas</p>
+          <h2 id="s6-title" class="sec-title"><span class="sec-num">06 —</span> Dónde se usa hoy</h2>
+        </div>
+        <div class="grid-3 reveal">
+          <article class="card big-card">
+            <div class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V11l5 3v-3l5 3V5h4v16"/></svg></div>
+            <p class="domain">Industria 4.0</p>
+            <h3>Optimización de procesos industriales</h3>
+            <p>Enfoques de optimización con GP (OGP) en fábricas inteligentes: por ejemplo, evolucionar reglas de despacho para planificar tareas en talleres dinámicos.</p>
+            <p class="impact">Reglas que un ingeniero de planta puede leer, entender y aplicar.</p>
+          </article>
+          <article class="card big-card">
+            <div class="icon-box sand" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div>
+            <p class="domain">Finanzas y defensa</p>
+            <h3>Modelado financiero y defensa</h3>
+            <p>Herramientas como Beagle aplican regresión simbólica a modelos predictivos; sus desarrolladores reportan una mejora del 61 % en la predicción de precios de vivienda.</p>
+            <p class="impact">Precisión competitiva con una fórmula que se puede auditar.</p>
+          </article>
+          <article class="card big-card">
+            <div class="icon-box green" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 21c0-9 6-15 15-16-1 9-7 15-15 16z"/><path d="M5 21l8-8"/></svg></div>
+            <p class="domain">Agroalimentación y biomedicina</p>
+            <h3>Modelos explicables en ciencias de la vida</h3>
+            <p>Modelos simbólicos para estimar el contenido proteico de alimentos y para el monitoreo de enfermedades a partir de variables clínicas.</p>
+            <p class="impact">El experto del dominio puede validar cada variable del modelo.</p>
+          </article>
+        </div>
+        <p class="footnote reveal">Nota: las cifras de casos comerciales (p. ej. el 61 % de Beagle) son las reportadas por sus desarrolladores; conviene contrastarlas con la fuente original antes de citarlas.</p>
+      </div>
+    </section>
+
+    <!-- ═════════════ 07 LÍNEAS DE INVESTIGACIÓN ═════════════ -->
+    <section id="investigacion" class="section tinted" aria-labelledby="s-inv-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow"><span class="eyebrow-line"></span>Fronteras abiertas</p>
+          <h2 id="s-inv-title" class="sec-title"><span class="sec-num">07 —</span> Líneas de investigación activas</h2>
+          <p class="section-intro">Dónde se está trabajando hoy con más fuerza sobre GP. Cada línea incluye una referencia de entrada para quien quiera profundizar o elegir tema de tesis.</p>
+        </div>
+        <div class="grid-3 reveal">
+          <article class="card research-card">
+            <span class="card-index">07 / 01</span>
+            <div class="icon-box orange" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></div>
+            <h3>Genetic Improvement (GI)</h3>
+            <p>En lugar de evolucionar programas desde cero, GP modifica software ya existente para reparar errores, acelerarlo o reducir su consumo de energía o memoria, sin perder su funcionalidad.</p>
+            <div class="tag-list"><span>Reparación automática</span><span>Rendimiento</span><span>Ingeniería de software</span></div>
+            <p class="research-ref"><b>Punto de entrada:</b> Petke, J. et al. (2018). Genetic Improvement of Software: a Comprehensive Survey. <em>IEEE Transactions on Evolutionary Computation</em>, 22(3). · Le Goues, C. et al. (2012). GenProg. <em>IEEE Transactions on Software Engineering</em>, 38(1).</p>
+          </article>
+          <article class="card research-card">
+            <span class="card-index">07 / 02</span>
+            <div class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <h3>GP para IA explicable (XAI)</h3>
+            <p>GP como modelo interpretable por diseño y también como herramienta para explicar a posteriori modelos de caja negra mediante fórmulas o reglas simbólicas sustitutas.</p>
+            <div class="tag-list"><span>Interpretabilidad</span><span>Modelos sustitutos</span><span>Entornos regulados</span></div>
+            <p class="research-ref"><b>Punto de entrada:</b> Mei, Y. et al. (2023). Explainable Artificial Intelligence by Genetic Programming: A Survey. <em>IEEE Transactions on Evolutionary Computation</em>, 27(3).</p>
+          </article>
+          <article class="card research-card">
+            <span class="card-index">07 / 03</span>
+            <div class="icon-box green" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M6 16c3 0 4-9 7-9s3 5 6 5"/></svg></div>
+            <h3>Regresión simbólica a escala</h3>
+            <p>Comparación rigurosa de métodos con benchmarks comunes, mejores optimizadores de constantes y herramientas abiertas que llevan la regresión simbólica al trabajo científico diario.</p>
+            <div class="tag-list"><span>SRBench</span><span>PySR</span><span>Descubrimiento científico</span></div>
+            <p class="research-ref"><b>Punto de entrada:</b> La Cava, W. et al. (2021). Contemporary Symbolic Regression Methods and their Relative Performance. <em>NeurIPS Datasets and Benchmarks</em>. · Cranmer, M. (2023). PySR, arXiv:2305.01582.</p>
+          </article>
+          <article class="card research-card">
+            <span class="card-index">07 / 04</span>
+            <div class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 3 20h18z"/><circle cx="12" cy="14" r="2"/></svg></div>
+            <h3>GP semántica geométrica (GSGP) y GPU</h3>
+            <p>Operadores que actúan sobre el comportamiento (la semántica) del programa y no solo sobre su sintaxis, con un espacio de búsqueda sin óptimos locales; su costo motiva implementaciones paralelas en GPU.</p>
+            <div class="tag-list"><span>Semántica</span><span>CUDA</span><span>Investigación del autor</span></div>
+            <p class="research-ref"><b>Punto de entrada:</b> Moraglio, A., Krawiec, K. y Johnson, C. G. (2012). Geometric Semantic Genetic Programming. <em>PPSN XII</em>, LNCS 7491, Springer.</p>
+          </article>
+          <article class="card research-card">
+            <span class="card-index">07 / 05</span>
+            <div class="icon-box orange" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg></div>
+            <h3>GP + LLMs</h3>
+            <p>Los LLMs actúan como operadores de mutación y cruce sobre código, mientras el bucle evolutivo selecciona con un evaluador automático. Ya ha producido resultados nuevos en matemáticas y algoritmia.</p>
+            <div class="tag-list"><span>Evolutionary Coding Agents</span><span>Búsqueda de programas</span></div>
+            <p class="research-ref"><b>Punto de entrada:</b> Romera-Paredes, B. et al. (2024). Mathematical discoveries from program search with large language models. <em>Nature</em>, 625, 468–475.</p>
+          </article>
+          <article class="card research-card">
+            <span class="card-index">07 / 06</span>
+            <div class="icon-box sand" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8.5 6h7M7.3 8.2l3.4 7.6M16.7 8.2l-3.4 7.6"/></svg></div>
+            <h3>AutoML e hiperheurísticas</h3>
+            <p>GP diseña pipelines completos de aprendizaje automático o reglas de decisión (por ejemplo, de planificación de producción) que luego se reutilizan en problemas nuevos.</p>
+            <div class="tag-list"><span>TPOT</span><span>Scheduling</span><span>Diseño automático</span></div>
+            <p class="research-ref"><b>Punto de entrada:</b> Olson, R. S. et al. (2016). Evaluation of a Tree-based Pipeline Optimization Tool for Automating Data Science. <em>GECCO 2016</em>.</p>
+          </article>
+        </div>
+        <p class="callout reveal">Preguntas transversales en todas estas líneas: controlar el bloat, mantener la diversidad (p. ej. selección lexicase) y reducir el costo de evaluar el fitness.</p>
+      </div>
+    </section>
+
+    <!-- ═════════════ 08 PROBLEMAS ABIERTOS ═════════════ -->
+    <section id="problemas" class="section" aria-labelledby="s-prob-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow"><span class="eyebrow-line"></span>Lo que aún no está resuelto</p>
+          <h2 id="s-prob-title" class="sec-title"><span class="sec-num">08 —</span> Problemas abiertos de GP</h2>
+          <p class="section-intro">Tras más de treinta años, GP sigue teniendo retos fundamentales sin una solución definitiva. Son también buenas preguntas de tesis.</p>
+        </div>
+        <ol class="open-list reveal">
+          <li class="open-item">
+            <h3>Bloat y simplificación</h3>
+            <p>Los árboles crecen sin mejorar el fitness. Existen paliativos (límites, parsimonia), pero no una explicación completa de por qué ocurre ni una solución general.</p>
+            <p class="open-q">¿Cómo obtener programas compactos sin frenar la búsqueda?</p>
+          </li>
+          <li class="open-item">
+            <h3>Costo de evaluación</h3>
+            <p>Cada individuo se evalúa sobre todos los datos en cada generación. Con millones de registros o simulaciones costosas, el tiempo de cómputo se dispara.</p>
+            <p class="open-q">¿Cómo escalar GP a grandes volúmenes de datos sin perder calidad?</p>
+          </li>
+          <li class="open-item">
+            <h3>Generalización y sobreajuste</h3>
+            <p>Una fórmula puede ajustar perfectamente los datos de entrenamiento y fallar en datos nuevos. Medir y controlar la generalización de un programa sigue siendo difícil.</p>
+            <p class="open-q">¿Qué propiedades de un programa predicen que generalizará bien?</p>
+          </li>
+          <li class="open-item">
+            <h3>Optimización de constantes</h3>
+            <p>GP encuentra bien la estructura de una fórmula, pero ajustar sus constantes numéricas (p. ej. 3.14 o 0.8) solo con mutación y cruce es ineficiente.</p>
+            <p class="open-q">¿Cómo combinar búsqueda simbólica y optimización numérica de forma eficiente?</p>
+          </li>
+          <li class="open-item">
+            <h3>Teoría</h3>
+            <p>La teoría de GP (esquemas, análisis de tiempo de ejecución) explica casos sencillos, pero aún no predice el comportamiento en problemas realistas.</p>
+            <p class="open-q">¿Cuándo y por qué converge GP, y en cuántas generaciones?</p>
+          </li>
+          <li class="open-item">
+            <h3>Interpretabilidad medible</h3>
+            <p>Una fórmula legible no es automáticamente interpretable: 40 nodos son «legibles» pero nadie los entiende. Falta una medida aceptada de interpretabilidad.</p>
+            <p class="open-q">¿Cómo cuantificar qué tan comprensible es un modelo para un humano?</p>
+          </li>
+          <li class="open-item">
+            <h3>Síntesis de programas generales</h3>
+            <p>GP brilla en fórmulas, pero le cuesta evolucionar programas con bucles, recursión, estructuras de datos y módulos reutilizables.</p>
+            <p class="open-q">¿Cómo escalar GP de expresiones a software real?</p>
+          </li>
+          <li class="open-item">
+            <h3>Benchmarks y reproducibilidad</h3>
+            <p>Muchos estudios usan problemas de prueba demasiado fáciles o distintos entre sí, lo que dificulta comparar métodos de forma justa.</p>
+            <p class="open-q">¿Qué conjunto de problemas representa de verdad los retos del mundo real?</p>
+          </li>
+        </ol>
+        <p class="footnote reveal">Para una visión de conjunto: O’Neill, M., Vanneschi, L., Gustafson, S. y Banzhaf, W. (2010). Open issues in genetic programming. <em>Genetic Programming and Evolvable Machines</em>, 11(3–4), 339–363.</p>
+      </div>
+    </section>
+
+    <!-- ═════════════ 09 DEMO ═════════════ -->
+    <section id="demo" class="section tinted" aria-labelledby="s7-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow"><span class="eyebrow-line"></span>Demostración conceptual</p>
+          <h2 id="s7-title" class="sec-title"><span class="sec-num">09 —</span> Cómo se ve funcionando</h2>
+        </div>
+
+        <div class="demo-layout">
+          <div class="card demo-problem reveal">
+            <div>
+              <h3 style="margin-top:0">El problema</h3>
+              <p>Solo damos a GP los datos y los operadores permitidos <span class="mono">{+, −, *, /}</span> con terminales <span class="mono">{x, 1}</span>. Nadie le dice que la respuesta es cuadrática.</p>
+            </div>
+            <div class="data-pairs" aria-label="Datos de entrenamiento">
+              <span>(1, 2)</span><span>(2, 6)</span><span>(3, 12)</span>
+            </div>
+          </div>
+
+          <figure class="figure reveal">
+            <div class="panels panels-4" role="group" aria-label="Evolución del mejor individuo en cuatro generaciones">
+              <div class="panel">
+                <svg class="diagram" viewBox="0 0 220 200" role="img" aria-label="Generación 0: x, MAE 4.67">
+                  <g class="nd leaf"><circle cx="110" cy="105" r="20"/><text x="110" y="105">x</text></g>
+                </svg>
+                <span class="panel-cap"><b>Gen. 0</b> · <code>x</code><br><span class="warn">MAE 4.67</span></span>
+              </div>
+              <div class="panel">
+                <svg class="diagram" viewBox="0 0 220 200" role="img" aria-label="Generación 3: x más x, MAE 2.67">
+                  <line class="edge" x1="110" y1="65" x2="70" y2="140"/><line class="edge" x1="110" y1="65" x2="150" y2="140"/>
+                  <g class="nd fn"><circle cx="110" cy="65" r="20"/><text x="110" y="65">+</text></g>
+                  <g class="nd leaf"><circle cx="70" cy="140" r="20"/><text x="70" y="140">x</text></g>
+                  <g class="nd leaf"><circle cx="150" cy="140" r="20"/><text x="150" y="140">x</text></g>
+                </svg>
+                <span class="panel-cap"><b>Gen. 3</b> · <code>x + x</code><br>MAE 2.67</span>
+              </div>
+              <div class="panel">
+                <svg class="diagram" viewBox="0 0 220 200" role="img" aria-label="Generación 6: x por x más 1, MAE 1">
+                  <line class="edge" x1="110" y1="35" x2="70" y2="105"/><line class="edge" x1="110" y1="35" x2="150" y2="105"/>
+                  <line class="edge" x1="70" y1="105" x2="40" y2="172"/><line class="edge" x1="70" y1="105" x2="100" y2="172"/>
+                  <g class="nd fn"><circle cx="110" cy="35" r="20"/><text x="110" y="35">+</text></g>
+                  <g class="nd fn"><circle cx="70" cy="105" r="20"/><text x="70" y="105">*</text></g>
+                  <g class="nd leaf"><circle cx="150" cy="105" r="20"/><text x="150" y="105">1</text></g>
+                  <g class="nd leaf"><circle cx="40" cy="172" r="20"/><text x="40" y="172">x</text></g>
+                  <g class="nd leaf"><circle cx="100" cy="172" r="20"/><text x="100" y="172">x</text></g>
+                </svg>
+                <span class="panel-cap"><b>Gen. 6</b> · <code>x*x + 1</code><br>MAE 1.00</span>
+              </div>
+              <div class="panel">
+                <svg class="diagram" viewBox="0 0 220 200" role="img" aria-label="Generación 9: x por x más x, MAE 0; la hoja 1 mutó a x">
+                  <line class="edge" x1="110" y1="35" x2="70" y2="105"/><line class="edge" x1="110" y1="35" x2="150" y2="105"/>
+                  <line class="edge" x1="70" y1="105" x2="40" y2="172"/><line class="edge" x1="70" y1="105" x2="100" y2="172"/>
+                  <g class="nd fn"><circle cx="110" cy="35" r="20"/><text x="110" y="35">+</text></g>
+                  <g class="nd fn"><circle cx="70" cy="105" r="20"/><text x="70" y="105">*</text></g>
+                  <g class="nd leaf new"><circle cx="150" cy="105" r="20"/><text x="150" y="105">x</text></g>
+                  <g class="nd leaf"><circle cx="40" cy="172" r="20"/><text x="40" y="172">x</text></g>
+                  <g class="nd leaf"><circle cx="100" cy="172" r="20"/><text x="100" y="172">x</text></g>
+                </svg>
+                <span class="panel-cap"><b>Gen. 9</b> · <code>x*x + x</code><br><span class="ok">MAE 0 ✓</span></span>
+              </div>
+            </div>
+            <figcaption>Mejor individuo de cada generación. En la generación 9, una mutación de hoja (<code>1 → x</code>, en naranja) completa la fórmula exacta.</figcaption>
+          </figure>
+
+          <div class="table-wrap reveal">
+            <table class="data-table">
+              <caption>Mejor individuo por generación (ejecución ilustrativa)</caption>
+              <thead><tr><th scope="col">Generación</th><th scope="col">Mejor individuo</th><th scope="col" class="num">ŷ(1, 2, 3)</th><th scope="col" class="num">MAE</th><th scope="col">Fitness</th><th scope="col">¿Qué ocurrió?</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">G0</th><td class="f">x</td><td class="num">1, 2, 3</td><td class="num">4.67</td><td><span class="fbar" style="width:12px" aria-hidden="true"></span><span class="mono">0.176</span></td><td class="wrap">Población inicial aleatoria (ramped half-and-half).</td></tr>
+                <tr><th scope="row">G3</th><td class="f">x + x</td><td class="num">2, 4, 6</td><td class="num">2.67</td><td><span class="fbar" style="width:19px" aria-hidden="true"></span><span class="mono">0.273</span></td><td class="wrap">El cruce combina hojas <code>x</code> bajo una suma.</td></tr>
+                <tr><th scope="row">G6</th><td class="f">x*x + 1</td><td class="num">2, 5, 10</td><td class="num">1.00</td><td><span class="fbar" style="width:35px" aria-hidden="true"></span><span class="mono">0.500</span></td><td class="wrap">El cruce inserta el bloque <code>x*x</code> (como en 3.5).</td></tr>
+                <tr class="best"><th scope="row">G9</th><td class="f">x*x + x <span class="badge">exacto</span></td><td class="num">2, 6, 12</td><td class="num">0.00</td><td><span class="fbar" style="width:70px" aria-hidden="true"></span><span class="mono">1.000</span></td><td class="wrap">Mutación de hoja <code>1 → x</code>; se cumple el criterio de parada.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <blockquote class="keyquote reveal"><p>«GP descubre la fórmula sola; el humano solo define datos y operadores.»</p></blockquote>
+      </div>
+    </section>
+
+    <!-- ═════════════ 08 CIERRE ═════════════ -->
+    <section id="cierre" class="section closing" aria-labelledby="s8-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow"><span class="eyebrow-line"></span>10 — Cierre</p>
+          <h2 id="s8-title" class="sec-title">Resumen</h2>
+          <p class="section-intro">Cuatro ideas para recordar al salir de la clase.</p>
+        </div>
+        <ol class="takeaways reveal">
+          <li><strong>GP evoluciona programas</strong> representados como árboles de expresión.</li>
+          <li><strong>Cada elemento</strong> —fitness, selección, cruce, mutación, inicialización, parada, bloat— tiene una representación concreta y un rol en el bucle.</li>
+          <li><strong>GP produce fórmulas explicables</strong>, no cajas negras.</li>
+          <li><strong>En 2026 GP es clave</strong> en XAI, descubrimiento científico y sistemas híbridos con LLMs.</li>
+        </ol>
+        <div class="closing-actions reveal">
+          <a class="button button-light" href="gp-lab/index.html">Practicar en el laboratorio de GP <span aria-hidden="true">↗</span></a>
+          <a class="button button-secondary" style="color:#fff;background:transparent;border-color:rgba(255,255,255,.3)" href="#inicio">Volver al inicio</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════════ 09 REFERENCIAS ═════════════ -->
+    <section id="referencias" class="section" aria-labelledby="s9-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow"><span class="eyebrow-line"></span>Para profundizar</p>
+          <h2 id="s9-title" class="sec-title"><span class="sec-num">11 —</span> Referencias</h2>
+          <p class="section-intro">Las obras fundacionales de GP y los textos de referencia para seguir estudiando.</p>
+        </div>
+        <ol class="ref-list reveal">
+          <li class="ref-item ref-key">
+            <span class="ref-year">1992</span>
+            <div>
+              <span class="ref-kind">Libro fundacional</span>
+              <p class="ref-cite">Koza, J. R. (1992). <em>Genetic Programming: On the Programming of Computers by Means of Natural Selection</em>. Cambridge, MA: MIT Press.</p>
+              <p class="ref-note">La obra que da nombre y método al campo: árboles de expresión, cruce de subárboles, ramped half-and-half y decenas de problemas resueltos.</p>
+            </div>
+          </li>
+          <li class="ref-item">
+            <span class="ref-year">1989</span>
+            <div>
+              <span class="ref-kind">Artículo de congreso</span>
+              <p class="ref-cite">Koza, J. R. (1989). Hierarchical genetic algorithms operating on populations of computer programs. En <em>Proceedings of the 11th International Joint Conference on Artificial Intelligence (IJCAI-89)</em>, Vol. 1, pp. 768–774.</p>
+              <p class="ref-note">Primera presentación de Koza del enfoque que formalizaría en 1992.</p>
+            </div>
+          </li>
+          <li class="ref-item">
+            <span class="ref-year">1985</span>
+            <div>
+              <span class="ref-kind">Artículo de congreso</span>
+              <p class="ref-cite">Cramer, N. L. (1985). A representation for the adaptive generation of simple sequential programs. En <em>Proceedings of the First International Conference on Genetic Algorithms and their Applications</em>, pp. 183–187.</p>
+              <p class="ref-note">Primer uso de programas representados como árboles dentro de un algoritmo genético.</p>
+            </div>
+          </li>
+          <li class="ref-item">
+            <span class="ref-year">1994</span>
+            <div>
+              <span class="ref-kind">Libro</span>
+              <p class="ref-cite">Koza, J. R. (1994). <em>Genetic Programming II: Automatic Discovery of Reusable Programs</em>. Cambridge, MA: MIT Press.</p>
+              <p class="ref-note">Introduce las funciones definidas automáticamente (ADFs) para reutilizar subprogramas.</p>
+            </div>
+          </li>
+          <li class="ref-item">
+            <span class="ref-year">1998</span>
+            <div>
+              <span class="ref-kind">Libro de texto</span>
+              <p class="ref-cite">Banzhaf, W., Nordin, P., Keller, R. E. y Francone, F. D. (1998). <em>Genetic Programming: An Introduction</em>. San Francisco: Morgan Kaufmann.</p>
+              <p class="ref-note">Introducción académica clásica, útil como texto de curso.</p>
+            </div>
+          </li>
+          <li class="ref-item">
+            <span class="ref-year">2002</span>
+            <div>
+              <span class="ref-kind">Libro</span>
+              <p class="ref-cite">Langdon, W. B. y Poli, R. (2002). <em>Foundations of Genetic Programming</em>. Berlín: Springer.</p>
+              <p class="ref-note">Fundamentos teóricos: teoría de esquemas, espacio de búsqueda y bloat.</p>
+            </div>
+          </li>
+          <li class="ref-item">
+            <span class="ref-year">2008</span>
+            <div>
+              <span class="ref-kind">Libro de acceso abierto</span>
+              <p class="ref-cite">Poli, R., Langdon, W. B. y McPhee, N. F. (2008). <em>A Field Guide to Genetic Programming</em>. Lulu.com.</p>
+              <p class="ref-note">Guía práctica y gratuita; el mejor punto de partida después de esta clase.</p>
+            </div>
+          </li>
+          <li class="ref-item">
+            <span class="ref-year">2010</span>
+            <div>
+              <span class="ref-kind">Artículo de revista</span>
+              <p class="ref-cite">O’Neill, M., Vanneschi, L., Gustafson, S. y Banzhaf, W. (2010). Open issues in genetic programming. <em>Genetic Programming and Evolvable Machines</em>, 11(3–4), 339–363.</p>
+              <p class="ref-note">Revisión de los problemas abiertos del campo, base de la sección 08.</p>
+            </div>
+          </li>
+          <li class="ref-item">
+            <span class="ref-year">2009</span>
+            <div>
+              <span class="ref-kind">Artículo de revista</span>
+              <p class="ref-cite">Schmidt, M. y Lipson, H. (2009). Distilling free-form natural laws from experimental data. <em>Science</em>, 324(5923), 81–85.</p>
+              <p class="ref-note">Regresión simbólica que redescubre leyes físicas a partir de datos (base de Eureqa).</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner shell">
+      <a class="brand footer-brand" href="index.html">
+        <img class="brand-mark" src="logo-square.png" alt="" width="39" height="39">
+        <span class="brand-name"><b>Dr. José Manuel Muñoz Contreras</b></span>
+      </a>
+      <p>Clase introductoria de Programación Genética</p>
+      <div class="footer-links"><a href="index.html">Inicio</a><a href="docencia.html">Docencia</a></div>
+    </div>
+    <div class="footer-bottom shell"><span>© <span id="current-year">2026</span> José Manuel Muñoz Contreras</span><span>Material docente · Contenido sujeto a actualización</span></div>
+  </footer>
+
+  <button class="to-top" id="to-top" type="button" aria-label="Volver arriba">↑</button>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var bar = document.getElementById('progress');
+      var toTop = document.getElementById('to-top');
+      var nav = document.getElementById('primary-nav');
+      var toggle = document.querySelector('.menu-toggle');
+      var links = Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]'));
+      var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var ticking = false;
+
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+
+      function update() {
+        var max = root.scrollHeight - window.innerHeight;
+        var p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+        bar.style.transform = 'scaleX(' + p + ')';
+        toTop.classList.toggle('visible', window.scrollY > window.innerHeight * 0.8);
+
+        var current = -1;
+        var line = window.innerHeight * 0.35;
+        sections.forEach(function (s, i) { if (s && s.getBoundingClientRect().top <= line) current = i; });
+        if (window.innerHeight + window.scrollY >= root.scrollHeight - 4) current = sections.length - 1;
+        links.forEach(function (a, i) {
+          var on = i === current;
+          a.classList.toggle('active', on);
+          if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current');
+        });
+        ticking = false;
+      }
+      window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+      }, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+
+      function closeMenu() {
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Abrir menú de secciones');
+      }
+      toggle.addEventListener('click', function () {
+        var open = nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Cerrar menú de secciones' : 'Abrir menú de secciones');
+      });
+      links.forEach(function (a) { a.addEventListener('click', closeMenu); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && nav.classList.contains('open')) { closeMenu(); toggle.focus(); }
+      });
+
+      toTop.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+        document.getElementById('hero-title').focus({ preventScroll: true });
+      });
+      document.getElementById('hero-title').setAttribute('tabindex', '-1');
+
+      var revealEls = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window) || reduceMotion) {
+        revealEls.forEach(function (el) { el.classList.add('in'); });
+      } else {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
+          });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+        revealEls.forEach(function (el) { io.observe(el); });
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -116,6 +116,10 @@ button { font: inherit; }
 .course-item h3 { margin: 0; font: 700 1rem var(--display); letter-spacing: -.025em; }
 .course-item p { margin: .3rem 0 0; color: var(--ink-soft); font-size: .82rem; }
 .course-arrow { color: var(--blue); }
+.course-link { transition: background .2s; }
+.course-link:hover h3, .course-link:focus-visible h3 { color: var(--blue); }
+.course-link .course-arrow { transition: transform .2s; }
+.course-link:hover .course-arrow { transform: translate(3px,-3px); }
 .project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 .project-card { overflow: hidden; background: white; border: 1px solid var(--line); border-radius: 12px; transition: transform .2s, box-shadow .2s; }
 .project-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
